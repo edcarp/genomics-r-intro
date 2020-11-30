@@ -231,17 +231,14 @@ To execute this command, make sure your cursor is on the same line the command
 is written. Then click the <KBD>Run</KBD> button that is just above the first
 line of your script in the header of the Source pane.
 
-*NOTE: this part needs to be updated for Edinburgh.*
-
-In the console, we expect to see the following output*:
+In the Console, we expect to see the following output, below the instruction you executed output in blue:
 
 ~~~
 [1] "/home/dcuser/dc_genomics_r"
 ~~~
 {: .output}
 
-\* Notice, at the Console, you will also see the instruction you executed
-above the output in blue.
+NOTE: In the output, `dcuser` represents your username, however if you are using the University of Edinburgh's *Notable* service, this will be replaced by `jovyan` due to how the service is set up. 
 
 Since we will be learning several commands, we may already want to keep some
 short notes in our script to explain the purpose of the command. Entering a `#`
@@ -266,7 +263,7 @@ getwd()
 > {: .solution}
 {: .challenge}
 
-For the purposes of this exercise we want you to be in the directory `"/home/dcuser/R_data"`.
+For the purposes of this exercise we want you to be in the directory `"/home/dcuser/dc_genomics_r"`.
 What if you weren't? You can set your home directory using the `setwd()`
 command. Enter this command in your script, but *don't run* this yet.
 
@@ -285,6 +282,8 @@ and `dc_genomics_r` directory. The path in your script should look like this:
 ```{r, eval = FALSE, purl = FALSE}
 # This sets the working directory
 setwd("/home/dcuser/dc_genomics_r")
+
+# NOTE: if you are using Notable, replace 'dcuser' with 'jovyan'
 ```
 
 When you run this command, the console repeats the command, but gives you no
@@ -309,10 +308,7 @@ working directory is the first step to analyzing your data.
 
 ## Using functions in R, without needing to master them
 
-A function in R (or any computing language) is a short
-program that takes some input and returns some output. Functions may seem like an advanced topic (and they are), but you have already
-used at least one function in R. `getwd()` is a function! The next sections will help you understand what is happening in
-any R script.
+A function in R (or any computing language) is a short program that takes some input and returns some output. Functions may seem like an advanced topic (and they are), but you have already used at least one function in R. `getwd()` is a function! The next sections will help you understand what is happening in any R script.
 
 > ## Exercise: What do these functions do?
 >
