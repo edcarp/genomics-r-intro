@@ -284,11 +284,6 @@ where we are taking a range).
 > ## Exercise: Subsetting a data frame
 >
 > **Try the following indices and functions and try to figure out what they return**
-<<<<<<< HEAD
->
-=======
->
->>>>>>> update-lesson-03
 > a. `variants[1,1]`
 >
 > b. `variants[2,4]`
