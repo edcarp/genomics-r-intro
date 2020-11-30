@@ -517,13 +517,15 @@ Lets summarize this section on coercion with a few take home messages.
 - Check the structure (`str()`) of your data frames before working with them!
 
 Regarding the first bullet point, one way to avoid needless coercion when
-importing a data frame using any one of the `read.table()` functions such as
-`read.csv()` is to set the argument `StringsAsFactors` to FALSE. By default,
-this argument is TRUE. Setting it to FALSE will treat any non-numeric column to
-a character type. `read.csv()` documentation, you will also see you can
-explicitly type your columns using the `colClasses` argument. Other R packages
-(such as the Tidyverse "readr") don't have this particular conversion issue,
-but many packages will still try to guess a  data type.
+importing a data frame is to use functions which  won't attempt to convert your
+data types, such as the `read_csv()` function, or others from the `readr` package we used earlier.
+This is preferrable to using any one of the `read.table()` functions such as
+`read.csv()` which by default have the argument `StringsAsFactors` set to TRUE. 
+
+If you do use the `read.table()` functions from Base R, always ensure you set 
+the argument `StringsAsFactors` to FALSE. Setting it to FALSE will treat any 
+non-numeric column to a character type. In the `read.csv()` documentation, you 
+will also see you can explicitly type your columns using the `colClasses` argument.
 
 ## Data frame bonus material: math, sorting, renaming
 
