@@ -35,16 +35,15 @@ source: Rmd
 In this lesson we will take you through the very first things you need to get
 R working.
 
-> ## Tip: This lesson works best on the cloud
+> ## Tip: Install R and RStudio locally anyway
 >
-> Remember, these lessons assume we are using the pre-configured virtual machine
-> instances provided to you at a genomics workshop. Much of this work could be
-> done on your laptop, but we use instances to simplify workshop setup
-> requirements, and to get you familiar with using the cloud (a common
-> requirement for working with big data).
-> Visit the [Genomics Workshop setup page](http://www.datacarpentry.org/genomics-workshop/setup.html)
-> for details on getting this instance running on your own, or for the info you
-> need to do this on your own computer.
+> These lessons are designed to use an online RStudio server. This simplifies
+> installation and running of the workshop - but servers can go down 
+> during workshops.
+> If you are using your own computer for this lesson, please install a local copy 
+> of both R ([download R](https://www.stats.bris.ac.uk/R/)) 
+> and RStudio ([download RStudio desktop](https://rstudio.com/products/rstudio/)).
+> After the workshop, this enables you to keep analysing data on your local computer.
 {: .callout}
 
 
@@ -100,30 +99,36 @@ standalone software.
 
 ## Log on to RStudio Server
 
-Open a web browser and enter the IP address of your instance 
-(provided by your instructors), followed by
-`:8787`. For example, if your IP address was 123.45.67.89 your URL would be
+### Users with University of Edinburgh EASE logins
 
-```
-http://123.45.67.89:8787
-```
+Open a web browser and enter the IP address of the noteable server from EDINA:
+
+https://noteable.edina.ac.uk/login/
 
 > ## Tip: Make sure there are no spaces before or after your URL or
 > your web browser may interpret it as a search query.
 {: .callout}
 
-You should now be looking at a page that will allow you to login to the RStudio
-server:
+Login using your EASE username and password.
 
-<img src="../fig/rstudio_login_screen.png" alt="rstudio default session" style="width: 1000px;"/>
+You should now see a choice of notebook servers to run. Please choose RStudio server and click on "Start":
 
-Enter your user credentials and click <kbd>Sign In</kbd>. The credentials for
-the genomics Data Carpentry instances will be provided by your instructors. 
+<img src="../fig/edina_noteable_rstudioserver_choose.png" alt="choose rstudio server" style="width: 400px;"/>
 
 You should now see the RStudio interface:
 
 <img src="../fig/rstudio_session_default.png" alt="rstudio default session" style="width:1000px;"/>
 
+> ## Tip: If you get disconnected, you should be able to return to 
+> [noteable login](https://noteable.edina.ac.uk/login/) and
+> reconnect to the same session later.
+{: .callout}
+
+### Other users
+
+There are other ways to get access to an RStudio server, including free pricing at [RStudio Cloud](https://rstudio.cloud/). Or your local organisation may have an instance that you can use.
+
+In this case, you should be able to start Rstudio and see a similar login page. to that shown above.
 
 ## Create an RStudio project
 
@@ -148,21 +153,6 @@ you may leave the default, which is your home directory "~".
 pane (more about the RStudio layout in a moment), you should see an RStudio
  project file, **dc_genomics_r.Rproj**. All RStudio projects end with the
  "**.Rproj**" file extension.
-
->## Tip: Make your project more reproducible with Packrat
-> One of the most wonderful and also frustrating aspects of working with R is
-> managing packages. We will talk more about them, but packages (e.g. ggplot2)
-> are add-ons that extend what you can do with R. Unfortunately it is very
-> common that you may run into versions of R and/or R packages that are not
-> compatible. This may make it difficult for someone to run your R script using
-> their version of R or a given R package, and/or make it more difficult to run
-> their scripts on your machine. [Packrat](https://rstudio.github.io/packrat/)
-> is an RStudio add-on that will associate your packages and project so that
-> your work is more portable and reproducible. To turn on Packrat click on
-> the <KBD>Tools</KBD> menu and select <KBD>Project Options</KBD>. Under
-> **Packrat** check off "**Use packrat with this project**" and follow any
-> installation instructions.
-{: .callout}
 
 ## Creating your first R script
 
@@ -206,7 +196,7 @@ environment:
 
 >## Tip: Uploads and downloads in the cloud
 > In the "Files" tab you can select a file and download it from your cloud
-> instance (click the "more" button) to your local computer.
+> instance (click the "more" button and "Export") to your local computer.
 > Uploads are also possible.
 {: .callout}
 
@@ -242,16 +232,14 @@ To execute this command, make sure your cursor is on the same line the command
 is written. Then click the <KBD>Run</KBD> button that is just above the first
 line of your script in the header of the Source pane.
 
-
-In the console, we expect to see the following output*:
+In the Console, we expect to see the following output, below the instruction you executed output in blue:
 
 ~~~
 [1] "/home/dcuser/dc_genomics_r"
 ~~~
 {: .output}
 
-\* Notice, at the Console, you will also see the instruction you executed
-above the output in blue.
+NOTE: In the output, `dcuser` represents your username, however if you are using the University of Edinburgh's *Notable* service, this will be replaced by `jovyan` due to how the service is set up. 
 
 Since we will be learning several commands, we may already want to keep some
 short notes in our script to explain the purpose of the command. Entering a `#`
@@ -278,7 +266,7 @@ getwd()
 > {: .solution}
 {: .challenge}
 
-For the purposes of this exercise we want you to be in the directory `"/home/dcuser/R_data"`.
+For the purposes of this exercise we want you to be in the directory `"/home/dcuser/dc_genomics_r"`.
 What if you weren't? You can set your home directory using the `setwd()`
 command. Enter this command in your script, but *don't run* this yet.
 
@@ -300,6 +288,8 @@ and `dc_genomics_r` directory. The path in your script should look like this:
 ~~~
 # This sets the working directory
 setwd("/home/dcuser/dc_genomics_r")
+
+# NOTE: if you are using Notable, replace 'dcuser' with 'jovyan'
 ~~~
 {: .language-r}
 
@@ -325,10 +315,7 @@ working directory is the first step to analyzing your data.
 
 ## Using functions in R, without needing to master them
 
-A function in R (or any computing language) is a short
-program that takes some input and returns some output. Functions may seem like an advanced topic (and they are), but you have already
-used at least one function in R. `getwd()` is a function! The next sections will help you understand what is happening in
-any R script.
+A function in R (or any computing language) is a short program that takes some input and returns some output. Functions may seem like an advanced topic (and they are), but you have already used at least one function in R. `getwd()` is a function! The next sections will help you understand what is happening in any R script.
 
 > ## Exercise: What do these functions do?
 >
@@ -390,7 +377,7 @@ name:
 {: .language-r}
 
 The "Help" tab will show you information (often, too much information). You
-will slowly learn how to read and make sense of help files. Checking the "Usage" or "Examples"
+will slowly learn how to read and make sense of help files. Checking the "Usage" or "Examples" 
 headings is often a good place to look first. If you look under "Arguments," we
 also see what arguments we can pass to this function to modify its behavior.
 You can also see a function's argument using the `args()` function:
@@ -477,14 +464,14 @@ the `help.search()` function.
 > parentheses.
 >
 > - Chi-Squared test
-> - Student-t test
+> - Student t-test
 > - mixed linear model
 >
 >> ## Solution
 >>   While your search results may return several tests, we list a few you might
 >>   find:
 >> - Chi-Squared test: `stats::Chisquare`
->> - Student-t test: `stats::TDist`
+>> - Student t-test: `stats::t.test`
 >> - mixed linear model: `stats::lm.glm`
 > {: .solution}
 {: .challenge}
