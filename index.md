@@ -51,7 +51,4 @@ exercises in class, re-do them on your own, and then work on your own problems.
 >    of your training in the bench or field to working with analyses. Evaluate
 >    results critically, and don't expect that things will always work the first
 >    time, or that they will always work in the same way.
-> - **Genomics Data Carpentry Instance**: This lesson assumes you are using a
->   Genomics Data Carpentry instance as described on the
->   [Genomics Workshop setup page](http://www.datacarpentry.org/genomics-workshop/setup.html)
 {: .prereq}
