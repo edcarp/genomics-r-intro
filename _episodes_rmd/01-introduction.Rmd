@@ -359,7 +359,7 @@ name:
 ```
 
 The "Help" tab will show you information (often, too much information). You
-will slowly learn how to read and make sense of help files. Checking the "Usage" or "Examples"
+will slowly learn how to read and make sense of help files. Checking the "Usage" or "Examples" 
 headings is often a good place to look first. If you look under "Arguments," we
 also see what arguments we can pass to this function to modify its behavior.
 You can also see a function's argument using the `args()` function:
@@ -416,14 +416,14 @@ the `help.search()` function.
 > parentheses.
 >
 > - Chi-Squared test
-> - Student-t test
+> - Student t-test
 > - mixed linear model
 >
 >> ## Solution
 >>   While your search results may return several tests, we list a few you might
 >>   find:
 >> - Chi-Squared test: `stats::Chisquare`
->> - Student-t test: `stats::TDist`
+>> - Student t-test: `stats::t.test`
 >> - mixed linear model: `stats::lm.glm`
 > {: .solution}
 {: .challenge}
