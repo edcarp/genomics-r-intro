@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2020-11-30 22:02:22 +0000">
+    <meta http-equiv="last-modified" content="2020-11-30 23:32:47 +0000">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -342,7 +342,7 @@
 	<li><p>Explain the basic principle of tidy datasets</p>
 </li>
 	
-	<li><p>Be able to load a tabular dataset using base R functions</p>
+	<li><p>Be able to load a tabular dataset using flexible functions</p>
 </li>
 	
 	<li><p>Be able to determine the structure of a data frame including its dimensions and the datatypes of variables</p>
@@ -455,26 +455,23 @@ every time you open a new R session and want to use that package.</em></p>
 
 <p>Note: We can use “two colon” notation to describe which external (ie non-“base-R”) package a function comes from, like this: <code class="language-plaintext highlighter-rouge">readr::read_csv()</code>. This helps us keep track of which function comes from which package - handy if we’re mixing and matching, and sharing our code with others who might not be familiar with that function.</p>
 
-<p>#For our purpose here, we will focus on using the tools every R installation comes with (so called “base” R) to import a comma-delimited file containing the results of our variant calling workflow.
-#We will need to load the sheet using a function called <code class="language-plaintext highlighter-rouge">read.csv()</code>.</p>
-
 <blockquote class="challenge">
-  <h2 id="exercise-review-the-arguments-of-the-readcsv-function">Exercise: Review the arguments of the <code class="language-plaintext highlighter-rouge">read.csv()</code> function</h2>
+  <h2 id="exercise-review-the-arguments-of-the-read_csv-function">Exercise: Review the arguments of the <code class="language-plaintext highlighter-rouge">read_csv()</code> function</h2>
 
-  <p><strong>Before using the <code class="language-plaintext highlighter-rouge">read.csv()</code> function, use R’s help feature to answer the
+  <p><strong>Before using the <code class="language-plaintext highlighter-rouge">read_csv()</code> function, use R’s help feature to answer the
 following questions</strong>.</p>
 
   <p><em>Hint</em>: Entering ‘?’ before the function name and then running that line will
 bring up the help documentation. Also, when reading this particular help
-be careful to pay attention to the ‘read.csv’ expression under the ‘Usage’
+be careful to pay attention to the ‘read_csv’ expression under the ‘Usage’
 heading. Other answers will be in the ‘Arguments’ heading.</p>
 
-  <p>A) What is the default parameter for ‘header’ in the <code class="language-plaintext highlighter-rouge">read.csv()</code> function?</p>
+  <p>A) What is the default parameter for ‘col_names’ in the <code class="language-plaintext highlighter-rouge">read_csv()</code> function?</p>
 
-  <p>B) What argument would you have to change to read a file that was delimited
-by semicolons (;) rather than commas?</p>
+  <p>B) How might you have to change the function to read a file that was delimited
+by semicolons (;) rather than commas? What do you learn about the function <code class="language-plaintext highlighter-rouge">read_csv()</code>?</p>
 
-  <p>C) What argument would you have to change to read file in which numbers
+  <p>C) How might you have to change the function to read in a file in which numbers
 used commas for decimal separation (i.e. 1,00)?</p>
 
   <p>D) What argument would you have to change to read in only the first 10,000 rows
@@ -483,29 +480,45 @@ of a very large file?</p>
   <blockquote class="solution">
     <h2 id="solution">Solution</h2>
 
-    <p>A) The <code class="language-plaintext highlighter-rouge">read.csv()</code> function has the argument ‘header’ set to TRUE by default,
+    <p>A) The <code class="language-plaintext highlighter-rouge">read_csv()</code> function has the argument <code class="language-plaintext highlighter-rouge">col_names</code> set to TRUE by default,
 this means the function always assumes the first row is header information,
 (i.e. column names)</p>
 
-    <p>B) The <code class="language-plaintext highlighter-rouge">read.csv()</code> function has the argument ‘sep’ set to “,”. This means
+    <p>B) Looking at the information in the function description, we learn that
+<code class="language-plaintext highlighter-rouge">read_csv()</code> is a a “version” or “special case” of the function <code class="language-plaintext highlighter-rouge">read_delim()</code>,
+in which the <code class="language-plaintext highlighter-rouge">delim</code> argument (the separator) is set to <code class="language-plaintext highlighter-rouge">,</code>. This means
 the function assumes commas are used as delimiters, as you would expect.
-Changing this parameter (e.g. <code class="language-plaintext highlighter-rouge">sep=";"</code>) would now interpret semicolons as
-delimiters.</p>
+Changing this parameter (e.g. <code class="language-plaintext highlighter-rouge">delim=";"</code>) would now interpret semicolons as
+delimiters when using the <code class="language-plaintext highlighter-rouge">read_delim()</code> function.</p>
 
-    <p>C) Although it is not listed in the <code class="language-plaintext highlighter-rouge">read.csv()</code> usage, <code class="language-plaintext highlighter-rouge">read.csv()</code> is
-a “version” of the function <code class="language-plaintext highlighter-rouge">read.table()</code> and accepts all its arguments.
-If you set <code class="language-plaintext highlighter-rouge">dec=","</code> you could change the decimal operator. We’d probably
-assume the delimiter is some other character.</p>
+    <p>C) Reading more in the description about the usage of <code class="language-plaintext highlighter-rouge">read_csv()</code> and other
+functions related to <code class="language-plaintext highlighter-rouge">read_delim()</code>, you can see that <code class="language-plaintext highlighter-rouge">read_csv2()</code> would
+let us use the comma as our decimal point (aka “decimal operator”).
+We can see that the <code class="language-plaintext highlighter-rouge">read_csv2()</code> function also uses <code class="language-plaintext highlighter-rouge">;</code> as the field separator.</p>
 
-    <p>D) You can set <code class="language-plaintext highlighter-rouge">nrow</code> to a numeric value (e.g. <code class="language-plaintext highlighter-rouge">nrow=10000</code>) to choose how
+    <p>D) You can set <code class="language-plaintext highlighter-rouge">n_max</code> to a numeric value (e.g. <code class="language-plaintext highlighter-rouge">nrow=10000</code>) to choose how
 many rows of a file you read in. This may be useful for very large files
 where not all the data is needed to test some data cleaning steps you are
 applying.</p>
 
     <p>Hopefully, this exercise gets you thinking about using the provided help
+«««&lt; HEAD
 documentation in R. There are many arguments that exist, but which we wont
+=======
+documentation in R. There are many arguments that exist, but which we won’t</p>
+    <blockquote>
+      <blockquote>
+        <blockquote>
+          <blockquote>
+            <blockquote>
+              <p>update-lesson-03
 have time to cover. Look here to get familiar with functions you use
 frequently, you may be surprised at what you find they can do.</p>
+            </blockquote>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
   </blockquote>
 </blockquote>
 
@@ -702,7 +715,8 @@ data frame structure to do that we use the <code class="language-plaintext highl
 
 <ul>
   <li>the object type <code class="language-plaintext highlighter-rouge">tibble</code> is displayed in the first row along with its
-dimensions, in this case 801 observations (rows) and 29 variables (columns) - a <code class="language-plaintext highlighter-rouge">tibble</code> is a ‘tidy’ format of data frame which has slightly nicer printing.</li>
+dimensions, in this case 801 observations (rows) and 29 variables (columns) -
+a <code class="language-plaintext highlighter-rouge">tibble</code> is a ‘tidy’ format of data frame which has slightly nicer printing.</li>
   <li>Each variable (column) has a name (e.g. <code class="language-plaintext highlighter-rouge">sample_id</code>). This is followed
 by the object mode (e.g. factor, int, num, etc.). Notice that before each
 variable name there is a <code class="language-plaintext highlighter-rouge">$</code> - this will be important later.</li>
@@ -717,7 +731,9 @@ categorial and continuous variables usually have different treatments. Sometimes
 you may want to have data treated as a factor, but in other cases, this may be
 undesirable.</p>
 
-<p>Since some of the data in our data frame are factors, lets see how factors work. First, we’ll extract one of the columns of our data frame to a new object, so that we don’t end up modifying the <code class="language-plaintext highlighter-rouge">variants</code> object by mistake.</p>
+<p>Since some of the data in our data frame are factors, lets see how factors work.
+First, we’ll extract one of the columns of our data frame to a new object, so
+that we don’t end up modifying the <code class="language-plaintext highlighter-rouge">variants</code> object by mistake.</p>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## extract the "REF" column to a new object</span><span class="w">
 
@@ -761,9 +777,8 @@ where we are taking a range).</p>
 <blockquote class="challenge">
   <h2 id="exercise-subsetting-a-data-frame">Exercise: Subsetting a data frame</h2>
 
-  <p><strong>Try the following indices and functions and try to figure out what they return</strong></p>
-
-  <p>a. <code class="language-plaintext highlighter-rouge">variants[1,1]</code></p>
+  <p><strong>Try the following indices and functions and try to figure out what they return</strong>
+a. <code class="language-plaintext highlighter-rouge">variants[1,1]</code></p>
 
   <p>b. <code class="language-plaintext highlighter-rouge">variants[2,4]</code></p>
 
@@ -1246,13 +1261,15 @@ coercion.</li>
 </ul>
 
 <p>Regarding the first bullet point, one way to avoid needless coercion when
-importing a data frame using any one of the <code class="language-plaintext highlighter-rouge">read.table()</code> functions such as
-<code class="language-plaintext highlighter-rouge">read.csv()</code> is to set the argument <code class="language-plaintext highlighter-rouge">StringsAsFactors</code> to FALSE. By default,
-this argument is TRUE. Setting it to FALSE will treat any non-numeric column to
-a character type. <code class="language-plaintext highlighter-rouge">read.csv()</code> documentation, you will also see you can
-explicitly type your columns using the <code class="language-plaintext highlighter-rouge">colClasses</code> argument. Other R packages
-(such as the Tidyverse “readr”) don’t have this particular conversion issue,
-but many packages will still try to guess a  data type.</p>
+importing a data frame is to use functions which  won’t attempt to convert your
+data types, such as the <code class="language-plaintext highlighter-rouge">read_csv()</code> function, or others from the <code class="language-plaintext highlighter-rouge">readr</code> package we used earlier.
+This is preferrable to using any one of the <code class="language-plaintext highlighter-rouge">read.table()</code> functions such as
+<code class="language-plaintext highlighter-rouge">read.csv()</code> which by default have the argument <code class="language-plaintext highlighter-rouge">StringsAsFactors</code> set to TRUE.</p>
+
+<p>If you do use the <code class="language-plaintext highlighter-rouge">read.table()</code> functions from Base R, always ensure you set
+the argument <code class="language-plaintext highlighter-rouge">StringsAsFactors</code> to FALSE. Setting it to FALSE will treat any
+non-numeric column to a character type. In the <code class="language-plaintext highlighter-rouge">read.csv()</code> documentation, you
+will also see you can explicitly type your columns using the <code class="language-plaintext highlighter-rouge">colClasses</code> argument.</p>
 
 <h2 id="data-frame-bonus-material-math-sorting-renaming">Data frame bonus material: math, sorting, renaming</h2>
 
@@ -1453,7 +1470,7 @@ be written in the current working directory).</p>
     </div>
   </div>
   <p class="text-muted text-right">
-    <small><i>Using <a href="https://github.com/carpentries/carpentries-theme/">The Carpentries theme</a> &mdash; Site last built on: 2020-11-30 22:02:22 +0000.</i></small>
+    <small><i>Using <a href="https://github.com/carpentries/carpentries-theme/">The Carpentries theme</a> &mdash; Site last built on: 2020-11-30 23:32:47 +0000.</i></small>
   </p>
 </footer>
 
