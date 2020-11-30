@@ -10,7 +10,7 @@ questions:
 - "How do I save tabular data generated in R?"
 objectives:
 - "Explain the basic principle of tidy datasets"
-- "Be able to load a tabular dataset using base R functions"
+- "Be able to load a tabular dataset using flexible functions"
 - "Be able to determine the structure of a data frame including its dimensions
   and the datatypes of variables"
 - "Be able to subset/retrieve values from a data frame"
@@ -116,27 +116,22 @@ There are a couple of differences between the two csv-reading functions, but `re
 
 Note: We can use "two colon" notation to describe which external (ie non-"base-R") package a function comes from, like this: `readr::read_csv()`. This helps us keep track of which function comes from which package - handy if we're mixing and matching, and sharing our code with others who might not be familiar with that function.
 
-
-
-#For our purpose here, we will focus on using the tools every R installation comes with (so called "base" R) to import a comma-delimited file containing the results of our variant calling workflow.
-#We will need to load the sheet using a function called `read.csv()`.
-
-> ## Exercise: Review the arguments of the `read.csv()` function
+> ## Exercise: Review the arguments of the `read_csv()` function
 >
-> **Before using the `read.csv()` function, use R's help feature to answer the
+> **Before using the `read_csv()` function, use R's help feature to answer the
 > following questions**.
 >
 > *Hint*: Entering '?' before the function name and then running that line will
 > bring up the help documentation. Also, when reading this particular help
-> be careful to pay attention to the 'read.csv' expression under the 'Usage'
+> be careful to pay attention to the 'read_csv' expression under the 'Usage'
 > heading. Other answers will be in the 'Arguments' heading.
 >
-> A) What is the default parameter for 'header' in the `read.csv()` function?
+> A) What is the default parameter for 'col_names' in the `read_csv()` function?
 >
-> B) What argument would you have to change to read a file that was delimited
-> by semicolons (;) rather than commas?
+> B) How might you have to change the function to read a file that was delimited
+> by semicolons (;) rather than commas? What do you learn about the function `read_csv()`?
 >
-> C) What argument would you have to change to read file in which numbers
+> C) How might you have to change the function to read in a file in which numbers
 > used commas for decimal separation (i.e. 1,00)?
 >
 > D) What argument would you have to change to read in only the first 10,000 rows
@@ -144,27 +139,29 @@ Note: We can use "two colon" notation to describe which external (ie non-"base-R
 >
 >> ## Solution
 >>
->> A) The `read.csv()` function has the argument 'header' set to TRUE by default,
+>> A) The `read_csv()` function has the argument `col_names` set to TRUE by default,
 >> this means the function always assumes the first row is header information,
 >> (i.e. column names)
 >>
->> B) The `read.csv()` function has the argument 'sep' set to ",". This means
+>> B) Looking at the information in the function description, we learn that 
+>> `read_csv()` is a a "version" or "special case" of the function `read_delim()`,
+>> in which the `delim` argument (the separator) is set to `,`. This means
 >> the function assumes commas are used as delimiters, as you would expect.
->> Changing this parameter (e.g. `sep=";"`) would now interpret semicolons as
->> delimiters.
+>> Changing this parameter (e.g. `delim=";"`) would now interpret semicolons as
+>> delimiters when using the `read_delim()` function.
 >>
->> C) Although it is not listed in the `read.csv()` usage, `read.csv()` is
->> a "version" of the function `read.table()` and accepts all its arguments.
->> If you set `dec=","` you could change the decimal operator. We'd probably
->> assume the delimiter is some other character.
+>> C) Reading more in the description about the usage of `read_csv()` and other
+>> functions related to `read_delim()`, you can see that `read_csv2()` would 
+>> let us use the comma as our decimal point (aka "decimal operator").
+>> We can see that the `read_csv2()` function also uses `;` as the field separator.
 >>
->> D) You can set `nrow` to a numeric value (e.g. `nrow=10000`) to choose how
+>> D) You can set `n_max` to a numeric value (e.g. `nrow=10000`) to choose how
 >> many rows of a file you read in. This may be useful for very large files
 >> where not all the data is needed to test some data cleaning steps you are
 >> applying.
 >>
 >> Hopefully, this exercise gets you thinking about using the provided help
->> documentation in R. There are many arguments that exist, but which we wont
+>> documentation in R. There are many arguments that exist, but which we won't
 >> have time to cover. Look here to get familiar with functions you use
 >> frequently, you may be surprised at what you find they can do.
 > {: .solution}
@@ -1107,13 +1104,15 @@ Lets summarize this section on coercion with a few take home messages.
 - Check the structure (`str()`) of your data frames before working with them!
 
 Regarding the first bullet point, one way to avoid needless coercion when
-importing a data frame using any one of the `read.table()` functions such as
-`read.csv()` is to set the argument `StringsAsFactors` to FALSE. By default,
-this argument is TRUE. Setting it to FALSE will treat any non-numeric column to
-a character type. `read.csv()` documentation, you will also see you can
-explicitly type your columns using the `colClasses` argument. Other R packages
-(such as the Tidyverse "readr") don't have this particular conversion issue,
-but many packages will still try to guess a  data type.
+importing a data frame is to use functions which  won't attempt to convert your
+data types, such as the `read_csv()` function, or others from the `readr` package we used earlier.
+This is preferrable to using any one of the `read.table()` functions such as
+`read.csv()` which by default have the argument `StringsAsFactors` set to TRUE. 
+
+If you do use the `read.table()` functions from Base R, always ensure you set 
+the argument `StringsAsFactors` to FALSE. Setting it to FALSE will treat any 
+non-numeric column to a character type. In the `read.csv()` documentation, you 
+will also see you can explicitly type your columns using the `colClasses` argument.
 
 ## Data frame bonus material: math, sorting, renaming
 
