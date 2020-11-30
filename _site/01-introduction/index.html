@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2020-11-30 19:18:35 +0000">
+    <meta http-equiv="last-modified" content="2020-11-30 21:41:40 +0000">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -502,6 +502,22 @@ pane (more about the RStudio layout in a moment), you should see an RStudio
   </li>
 </ol>
 
+<blockquote class="callout">
+  <h2 id="tip-make-your-project-more-reproducible-with-packrat">Tip: Make your project more reproducible with Packrat</h2>
+  <p>One of the most wonderful and also frustrating aspects of working with R is
+managing packages. We will talk more about them, but packages (e.g. ggplot2)
+are add-ons that extend what you can do with R. Unfortunately it is very
+common that you may run into versions of R and/or R packages that are not
+compatible. This may make it difficult for someone to run your R script using
+their version of R or a given R package, and/or make it more difficult to run
+their scripts on your machine. <a href="https://rstudio.github.io/packrat/">Packrat</a>
+is an RStudio add-on that will associate your packages and project so that
+your work is more portable and reproducible. To turn on Packrat click on
+the <kbd>Tools</kbd> menu and select <kbd>Project Options</kbd>. Under
+<strong>Packrat</strong> check off “<strong>Use packrat with this project</strong>” and follow any
+installation instructions.</p>
+</blockquote>
+
 <h2 id="creating-your-first-r-script">Creating your first R script</h2>
 
 <p>Now that we are ready to start exploring R, we will want to keep a record of the
@@ -547,7 +563,7 @@ for R functions and packages.</li>
 <blockquote class="callout">
   <h2 id="tip-uploads-and-downloads-in-the-cloud">Tip: Uploads and downloads in the cloud</h2>
   <p>In the “Files” tab you can select a file and download it from your cloud
-instance (click the “more” button and “Export”) to your local computer.
+instance (click the “more” button) to your local computer.
 Uploads are also possible.</p>
 </blockquote>
 
@@ -581,12 +597,15 @@ into the script:</p>
 is written. Then click the <kbd>Run</kbd> button that is just above the first
 line of your script in the header of the Source pane.</p>
 
-<p>In the Console, we expect to see the following output, below the instruction you executed output in blue:</p>
+<p><em>NOTE: this part needs to be updated for Edinburgh.</em></p>
+
+<p>In the console, we expect to see the following output*:</p>
 
 <div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[1] "/home/dcuser/dc_genomics_r"
 </code></pre></div></div>
 
-<p>NOTE: In the output, <code class="language-plaintext highlighter-rouge">dcuser</code> represents your username, however if you are using the University of Edinburgh’s <em>Notable</em> service, this will be replaced by <code class="language-plaintext highlighter-rouge">jovyan</code> due to how the service is set up.</p>
+<p>* Notice, at the Console, you will also see the instruction you executed
+above the output in blue.</p>
 
 <p>Since we will be learning several commands, we may already want to keep some
 short notes in our script to explain the purpose of the command. Entering a <code class="language-plaintext highlighter-rouge">#</code>
@@ -612,7 +631,7 @@ and ultimately run an entire script, instead of entering commands one-by-one.</p
   </blockquote>
 </blockquote>
 
-<p>For the purposes of this exercise we want you to be in the directory <code class="language-plaintext highlighter-rouge">"/home/dcuser/dc_genomics_r"</code>.
+<p>For the purposes of this exercise we want you to be in the directory <code class="language-plaintext highlighter-rouge">"/home/dcuser/R_data"</code>.
 What if you weren’t? You can set your home directory using the <code class="language-plaintext highlighter-rouge">setwd()</code>
 command. Enter this command in your script, but <em>don’t run</em> this yet.</p>
 
@@ -629,8 +648,6 @@ and <code class="language-plaintext highlighter-rouge">dc_genomics_r</code> dire
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># This sets the working directory</span><span class="w">
 </span><span class="n">setwd</span><span class="p">(</span><span class="s2">"/home/dcuser/dc_genomics_r"</span><span class="p">)</span><span class="w">
-
-</span><span class="c1"># NOTE: if you are using Notable, replace 'dcuser' with 'jovyan'</span><span class="w">
 </span></code></pre></div></div>
 
 <p>When you run this command, the console repeats the command, but gives you no
@@ -656,7 +673,10 @@ and other R tips.</p>
 
 <h2 id="using-functions-in-r-without-needing-to-master-them">Using functions in R, without needing to master them</h2>
 
-<p>A function in R (or any computing language) is a short program that takes some input and returns some output. Functions may seem like an advanced topic (and they are), but you have already used at least one function in R. <code class="language-plaintext highlighter-rouge">getwd()</code> is a function! The next sections will help you understand what is happening in any R script.</p>
+<p>A function in R (or any computing language) is a short
+program that takes some input and returns some output. Functions may seem like an advanced topic (and they are), but you have already
+used at least one function in R. <code class="language-plaintext highlighter-rouge">getwd()</code> is a function! The next sections will help you understand what is happening in
+any R script.</p>
 
 <blockquote class="challenge">
   <h2 id="exercise-what-do-these-functions-do">Exercise: What do these functions do?</h2>
@@ -716,7 +736,7 @@ name:</p>
 </span></code></pre></div></div>
 
 <p>The “Help” tab will show you information (often, too much information). You
-will slowly learn how to read and make sense of help files. Checking the “Usage” or “Examples” 
+will slowly learn how to read and make sense of help files. Checking the “Usage” or “Examples”
 headings is often a good place to look first. If you look under “Arguments,” we
 also see what arguments we can pass to this function to modify its behavior.
 You can also see a function’s argument using the <code class="language-plaintext highlighter-rouge">args()</code> function:</p>
@@ -779,7 +799,7 @@ parentheses.</p>
 
   <ul>
     <li>Chi-Squared test</li>
-    <li>Student t-test</li>
+    <li>Student-t test</li>
     <li>mixed linear model</li>
   </ul>
 
@@ -789,7 +809,7 @@ parentheses.</p>
   find:</p>
     <ul>
       <li>Chi-Squared test: <code class="language-plaintext highlighter-rouge">stats::Chisquare</code></li>
-      <li>Student t-test: <code class="language-plaintext highlighter-rouge">stats::t.test</code></li>
+      <li>Student-t test: <code class="language-plaintext highlighter-rouge">stats::TDist</code></li>
       <li>mixed linear model: <code class="language-plaintext highlighter-rouge">stats::lm.glm</code></li>
     </ul>
   </blockquote>
@@ -932,7 +952,7 @@ for each of these arguments.</p>
     </div>
   </div>
   <p class="text-muted text-right">
-    <small><i>Using <a href="https://github.com/carpentries/carpentries-theme/">The Carpentries theme</a> &mdash; Site last built on: 2020-11-30 19:18:35 +0000.</i></small>
+    <small><i>Using <a href="https://github.com/carpentries/carpentries-theme/">The Carpentries theme</a> &mdash; Site last built on: 2020-11-30 21:41:40 +0000.</i></small>
   </p>
 </footer>
 

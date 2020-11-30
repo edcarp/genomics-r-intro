@@ -154,6 +154,21 @@ pane (more about the RStudio layout in a moment), you should see an RStudio
  project file, **dc_genomics_r.Rproj**. All RStudio projects end with the
  "**.Rproj**" file extension.
 
+>## Tip: Make your project more reproducible with Packrat
+> One of the most wonderful and also frustrating aspects of working with R is
+> managing packages. We will talk more about them, but packages (e.g. ggplot2)
+> are add-ons that extend what you can do with R. Unfortunately it is very
+> common that you may run into versions of R and/or R packages that are not
+> compatible. This may make it difficult for someone to run your R script using
+> their version of R or a given R package, and/or make it more difficult to run
+> their scripts on your machine. [Packrat](https://rstudio.github.io/packrat/)
+> is an RStudio add-on that will associate your packages and project so that
+> your work is more portable and reproducible. To turn on Packrat click on
+> the <KBD>Tools</KBD> menu and select <KBD>Project Options</KBD>. Under
+> **Packrat** check off "**Use packrat with this project**" and follow any
+> installation instructions.
+{: .callout}
+
 ## Creating your first R script
 
 Now that we are ready to start exploring R, we will want to keep a record of the
@@ -196,7 +211,7 @@ environment:
 
 >## Tip: Uploads and downloads in the cloud
 > In the "Files" tab you can select a file and download it from your cloud
-> instance (click the "more" button and "Export") to your local computer.
+> instance (click the "more" button) to your local computer.
 > Uploads are also possible.
 {: .callout}
 
@@ -232,14 +247,17 @@ To execute this command, make sure your cursor is on the same line the command
 is written. Then click the <KBD>Run</KBD> button that is just above the first
 line of your script in the header of the Source pane.
 
-In the Console, we expect to see the following output, below the instruction you executed output in blue:
+*NOTE: this part needs to be updated for Edinburgh.*
+
+In the console, we expect to see the following output*:
 
 ~~~
 [1] "/home/dcuser/dc_genomics_r"
 ~~~
 {: .output}
 
-NOTE: In the output, `dcuser` represents your username, however if you are using the University of Edinburgh's *Notable* service, this will be replaced by `jovyan` due to how the service is set up. 
+\* Notice, at the Console, you will also see the instruction you executed
+above the output in blue.
 
 Since we will be learning several commands, we may already want to keep some
 short notes in our script to explain the purpose of the command. Entering a `#`
@@ -266,7 +284,7 @@ getwd()
 > {: .solution}
 {: .challenge}
 
-For the purposes of this exercise we want you to be in the directory `"/home/dcuser/dc_genomics_r"`.
+For the purposes of this exercise we want you to be in the directory `"/home/dcuser/R_data"`.
 What if you weren't? You can set your home directory using the `setwd()`
 command. Enter this command in your script, but *don't run* this yet.
 
@@ -288,8 +306,6 @@ and `dc_genomics_r` directory. The path in your script should look like this:
 ~~~
 # This sets the working directory
 setwd("/home/dcuser/dc_genomics_r")
-
-# NOTE: if you are using Notable, replace 'dcuser' with 'jovyan'
 ~~~
 {: .language-r}
 
@@ -315,7 +331,10 @@ working directory is the first step to analyzing your data.
 
 ## Using functions in R, without needing to master them
 
-A function in R (or any computing language) is a short program that takes some input and returns some output. Functions may seem like an advanced topic (and they are), but you have already used at least one function in R. `getwd()` is a function! The next sections will help you understand what is happening in any R script.
+A function in R (or any computing language) is a short
+program that takes some input and returns some output. Functions may seem like an advanced topic (and they are), but you have already
+used at least one function in R. `getwd()` is a function! The next sections will help you understand what is happening in
+any R script.
 
 > ## Exercise: What do these functions do?
 >
@@ -377,7 +396,7 @@ name:
 {: .language-r}
 
 The "Help" tab will show you information (often, too much information). You
-will slowly learn how to read and make sense of help files. Checking the "Usage" or "Examples" 
+will slowly learn how to read and make sense of help files. Checking the "Usage" or "Examples"
 headings is often a good place to look first. If you look under "Arguments," we
 also see what arguments we can pass to this function to modify its behavior.
 You can also see a function's argument using the `args()` function:
@@ -464,14 +483,14 @@ the `help.search()` function.
 > parentheses.
 >
 > - Chi-Squared test
-> - Student t-test
+> - Student-t test
 > - mixed linear model
 >
 >> ## Solution
 >>   While your search results may return several tests, we list a few you might
 >>   find:
 >> - Chi-Squared test: `stats::Chisquare`
->> - Student t-test: `stats::t.test`
+>> - Student-t test: `stats::TDist`
 >> - mixed linear model: `stats::lm.glm`
 > {: .solution}
 {: .challenge}

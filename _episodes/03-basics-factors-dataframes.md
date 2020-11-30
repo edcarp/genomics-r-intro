@@ -20,9 +20,11 @@ objectives:
 - "Be able to manipulate a factor, including subsetting and reordering"
 - "Be able to apply an arithmetic function to a data frame"
 - "Be able to coerce the class of an object (including variables in a data frame)"
+- "Be able to import data from Excel"
 - "Be able to save a data frame as a delimited file"
 keypoints:
-- "It is easy to import data into R from tabular formats into R. However, you still need to check that R has imported and interpreted your
+- "It is easy to import data into R from tabular formats including Excel.
+  However, you still need to check that R has imported and interpreted your
   data correctly"
 - "There are best practices for organizing your data (keeping it tidy) and R
   is great for this"
@@ -81,45 +83,10 @@ in your analysis, and its reproducibility.
  {: .callout}
 
 ## Importing tabular data into R
-There are several ways to import data into R.
-
-Every R installation comes with a set of ready-made tools - known as "base" R.  An example of this is the function called `read.csv()`, which would allow us to import a comma-delimited file containing the results of our variant calling workflow.
-
-However, as we're focussing more on genomics data and these datasets are often quite large, we're going to use an alternative function from the `readr` R package, called `read_csv()`.
-
-Packages in R are sets of additional functions that let you do more
-stuff in R. Some functions we'll use later come built into R;
-packages give you access to more functions. You need to install a package and
-then load it to be able to use it.
-
-To access the `read_csv()` function, we need to make sure we have the `readr` R package installed and loaded.
-
-
-~~~
-install.packages("readr") ## install
-~~~
-{: .language-r}
-
-You might get asked to choose a CRAN mirror -- this is asking you to
-choose a site to download the package from. The choice doesn't matter too much; I'd recommend choosing the RStudio mirror.
-
-
-~~~
-library("readr")          ## load
-~~~
-{: .language-r}
-
-*You only need to install a package once per computer, but you need to load it
-every time you open a new R session and want to use that package.*
-
-There are a couple of differences between the two csv-reading functions, but `read_csv()` is faster for large datasets, as well as having the data imported in a 'tidier' format (more on this later!). 
-
-Note: We can use "two colon" notation to describe which external (ie non-"base-R") package a function comes from, like this: `readr::read_csv()`. This helps us keep track of which function comes from which package - handy if we're mixing and matching, and sharing our code with others who might not be familiar with that function.
-
-
-
-#For our purpose here, we will focus on using the tools every R installation comes with (so called "base" R) to import a comma-delimited file containing the results of our variant calling workflow.
-#We will need to load the sheet using a function called `read.csv()`.
+There are several ways to import data into R. For our purpose here, we will
+focus on using the tools every R installation comes with (so called "base" R) to
+import a comma-delimited file containing the results of our variant calling workflow.
+We will need to load the sheet using a function called `read.csv()`.
 
 > ## Exercise: Review the arguments of the `read.csv()` function
 >
@@ -170,45 +137,23 @@ Note: We can use "two colon" notation to describe which external (ie non-"base-R
 > {: .solution}
 {: .challenge}
 
-Now, let's read in a data file from a [figshare](https://figshare.com/) instance which holds our dataset. We'll call this data `variants`. The argument we're passing (wrapped in quotes) to our `read_csv()` function is the file path or URL for our data. This tells the function where to access the .csv file. 
+Now, let's read in the file `combined_tidy_vcf.csv` which will be located in
+`/home/dcuser/.solutions/R_data/`. Call this data `variants`. The
+first argument to pass to our `read.csv()` function is the file path for our
+data. The file path must be in quotes and now is a good time to remember to
+use tab autocompletion. **If you use tab autocompletion you avoid typos and
+errors in file paths.** Use it!
 
 
 ~~~
 ## read in a CSV file and save it as 'variants'
 
-variants <- readr::read_csv("https://ndownloader.figshare.com/files/14632895")
+variants <- read.csv("../r_data/combined_tidy_vcf.csv")
 ~~~
 {: .language-r}
 
 
 
-~~~
-Parsed with column specification:
-cols(
-  .default = col_double(),
-  sample_id = col_character(),
-  CHROM = col_character(),
-  ID = col_logical(),
-  REF = col_character(),
-  ALT = col_character(),
-  FILTER = col_logical(),
-  INDEL = col_logical(),
-  ICB = col_logical(),
-  HOB = col_logical(),
-  DP4 = col_character(),
-  Indiv = col_character(),
-  gt_PL = col_number(),
-  gt_GT_alleles = col_character()
-)
-~~~
-{: .output}
-
-
-
-~~~
-See spec(...) for full column specifications.
-~~~
-{: .output}
 
 One of the first things you should notice is that in the Environment window,
 you have the `variants` object, listed as 801 obs. (observations/rows)
@@ -284,14 +229,14 @@ summary(variants)
                 3rd Qu.:1   3rd Qu.:1                      3rd Qu.:60.00  
                 Max.   :1   Max.   :1                      Max.   :60.00  
                                                                           
-    Indiv               gt_PL            gt_GT   gt_GT_alleles     
- Length:801         Min.   :   310   Min.   :1   Length:801        
- Class :character   1st Qu.:  1760   1st Qu.:1   Class :character  
- Mode  :character   Median :  2290   Median :1   Mode  :character  
-                    Mean   :  3392   Mean   :1                     
-                    3rd Qu.:  2550   3rd Qu.:1                     
-                    Max.   :255156   Max.   :1                     
-                                                                   
+    Indiv              gt_PL               gt_GT   gt_GT_alleles     
+ Length:801         Length:801         Min.   :1   Length:801        
+ Class :character   Class :character   1st Qu.:1   Class :character  
+ Mode  :character   Mode  :character   Median :1   Mode  :character  
+                                       Mean   :1                     
+                                       3rd Qu.:1                     
+                                       Max.   :1                     
+                                                                     
 ~~~
 {: .output}
 
@@ -319,75 +264,43 @@ str(variants)
 
 
 ~~~
-tibble [801 × 29] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
- $ sample_id    : chr [1:801] "SRR2584863" "SRR2584863" "SRR2584863" "SRR2584863" ...
- $ CHROM        : chr [1:801] "CP000819.1" "CP000819.1" "CP000819.1" "CP000819.1" ...
- $ POS          : num [1:801] 9972 263235 281923 433359 473901 ...
- $ ID           : logi [1:801] NA NA NA NA NA NA ...
- $ REF          : chr [1:801] "T" "G" "G" "CTTTTTTT" ...
- $ ALT          : chr [1:801] "G" "T" "T" "CTTTTTTTT" ...
- $ QUAL         : num [1:801] 91 85 217 64 228 210 178 225 56 167 ...
- $ FILTER       : logi [1:801] NA NA NA NA NA NA ...
- $ INDEL        : logi [1:801] FALSE FALSE FALSE TRUE TRUE FALSE ...
- $ IDV          : num [1:801] NA NA NA 12 9 NA NA NA 2 7 ...
- $ IMF          : num [1:801] NA NA NA 1 0.9 ...
- $ DP           : num [1:801] 4 6 10 12 10 10 8 11 3 7 ...
- $ VDB          : num [1:801] 0.0257 0.0961 0.7741 0.4777 0.6595 ...
- $ RPB          : num [1:801] NA 1 NA NA NA NA NA NA NA NA ...
- $ MQB          : num [1:801] NA 1 NA NA NA NA NA NA NA NA ...
- $ BQB          : num [1:801] NA 1 NA NA NA NA NA NA NA NA ...
- $ MQSB         : num [1:801] NA NA 0.975 1 0.916 ...
- $ SGB          : num [1:801] -0.556 -0.591 -0.662 -0.676 -0.662 ...
- $ MQ0F         : num [1:801] 0 0.167 0 0 0 ...
- $ ICB          : logi [1:801] NA NA NA NA NA NA ...
- $ HOB          : logi [1:801] NA NA NA NA NA NA ...
- $ AC           : num [1:801] 1 1 1 1 1 1 1 1 1 1 ...
- $ AN           : num [1:801] 1 1 1 1 1 1 1 1 1 1 ...
- $ DP4          : chr [1:801] "0,0,0,4" "0,1,0,5" "0,0,4,5" "0,1,3,8" ...
- $ MQ           : num [1:801] 60 33 60 60 60 60 60 60 60 60 ...
- $ Indiv        : chr [1:801] "/home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam" "/home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam" "/home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam" "/home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam" ...
- $ gt_PL        : num [1:801] 1210 1120 2470 910 2550 ...
- $ gt_GT        : num [1:801] 1 1 1 1 1 1 1 1 1 1 ...
- $ gt_GT_alleles: chr [1:801] "G" "T" "T" "CTTTTTTTT" ...
- - attr(*, "spec")=
-  .. cols(
-  ..   sample_id = col_character(),
-  ..   CHROM = col_character(),
-  ..   POS = col_double(),
-  ..   ID = col_logical(),
-  ..   REF = col_character(),
-  ..   ALT = col_character(),
-  ..   QUAL = col_double(),
-  ..   FILTER = col_logical(),
-  ..   INDEL = col_logical(),
-  ..   IDV = col_double(),
-  ..   IMF = col_double(),
-  ..   DP = col_double(),
-  ..   VDB = col_double(),
-  ..   RPB = col_double(),
-  ..   MQB = col_double(),
-  ..   BQB = col_double(),
-  ..   MQSB = col_double(),
-  ..   SGB = col_double(),
-  ..   MQ0F = col_double(),
-  ..   ICB = col_logical(),
-  ..   HOB = col_logical(),
-  ..   AC = col_double(),
-  ..   AN = col_double(),
-  ..   DP4 = col_character(),
-  ..   MQ = col_double(),
-  ..   Indiv = col_character(),
-  ..   gt_PL = col_number(),
-  ..   gt_GT = col_double(),
-  ..   gt_GT_alleles = col_character()
-  .. )
+'data.frame':	801 obs. of  29 variables:
+ $ sample_id    : chr  "SRR2584863" "SRR2584863" "SRR2584863" "SRR2584863" ...
+ $ CHROM        : chr  "CP000819.1" "CP000819.1" "CP000819.1" "CP000819.1" ...
+ $ POS          : int  9972 263235 281923 433359 473901 648692 1331794 1733343 2103887 2333538 ...
+ $ ID           : logi  NA NA NA NA NA NA ...
+ $ REF          : chr  "T" "G" "G" "CTTTTTTT" ...
+ $ ALT          : chr  "G" "T" "T" "CTTTTTTTT" ...
+ $ QUAL         : num  91 85 217 64 228 210 178 225 56 167 ...
+ $ FILTER       : logi  NA NA NA NA NA NA ...
+ $ INDEL        : logi  FALSE FALSE FALSE TRUE TRUE FALSE ...
+ $ IDV          : int  NA NA NA 12 9 NA NA NA 2 7 ...
+ $ IMF          : num  NA NA NA 1 0.9 ...
+ $ DP           : int  4 6 10 12 10 10 8 11 3 7 ...
+ $ VDB          : num  0.0257 0.0961 0.7741 0.4777 0.6595 ...
+ $ RPB          : num  NA 1 NA NA NA NA NA NA NA NA ...
+ $ MQB          : num  NA 1 NA NA NA NA NA NA NA NA ...
+ $ BQB          : num  NA 1 NA NA NA NA NA NA NA NA ...
+ $ MQSB         : num  NA NA 0.975 1 0.916 ...
+ $ SGB          : num  -0.556 -0.591 -0.662 -0.676 -0.662 ...
+ $ MQ0F         : num  0 0.167 0 0 0 ...
+ $ ICB          : logi  NA NA NA NA NA NA ...
+ $ HOB          : logi  NA NA NA NA NA NA ...
+ $ AC           : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ AN           : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ DP4          : chr  "0,0,0,4" "0,1,0,5" "0,0,4,5" "0,1,3,8" ...
+ $ MQ           : int  60 33 60 60 60 60 60 60 60 60 ...
+ $ Indiv        : chr  "/home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam" "/home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam" "/home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam" "/home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam" ...
+ $ gt_PL        : chr  "121,0" "112,0" "247,0" "91,0" ...
+ $ gt_GT        : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ gt_GT_alleles: chr  "G" "T" "T" "CTTTTTTTT" ...
 ~~~
 {: .output}
 
 Ok, thats a lot up unpack! Some things to notice.
 
-- the object type `tibble` is displayed in the first row along with its
-  dimensions, in this case 801 observations (rows) and 29 variables (columns) - a `tibble` is a 'tidy' format of data frame which has slightly nicer printing. 
+- the object type `data.frame` is displayed in the first row along with its
+  dimensions, in this case 801 observations (rows) and 29 variables (columns)
 - Each variable (column) has a name (e.g. `sample_id`). This is followed
   by the object mode (e.g. factor, int, num, etc.). Notice that before each
   variable name there is a `$` - this will be important later.
@@ -401,7 +314,9 @@ categorial and continuous variables usually have different treatments. Sometimes
 you may want to have data treated as a factor, but in other cases, this may be
 undesirable.
 
-Since some of the data in our data frame are factors, lets see how factors work. First, we'll extract one of the columns of our data frame to a new object, so that we don't end up modifying the `variants` object by mistake.
+Since some of the data in our data frame are factors, lets see how factors work. First, we'll
+extract one of the columns of our data frame to a new object, so that we don't end up
+modifying the `variants` object by mistake.
 
 
 ~~~
@@ -448,7 +363,76 @@ str(REF)
 
 For the sake of efficiency, R stores the content of a factor as a vector of
 integers, which an integer is assigned to each of the possible levels. Recall
-levels are assigned in alphabetical order. In this case, the first item in our "REF" object is "T", which happens to be the 49th level of our factor, ordered alphabeticaly. The next two items are both "G"s, which is the 33rd level of our factor.
+levels are assigned in alphabetical order. In this case, the first item in our "REF" object is
+"T", which happens to be the 49th level of our factor, ordered alphabeticaly. The next two
+items are both "G"s, which is the 33rd level of our factor.
+
+## Plotting and ordering factors
+
+One of the most common uses for factors will be when you plot categorical
+values. For example, suppose we want to know how many of our variants had each possible 
+nucleotide (or nucleotide combination) in the reference genome? We could generate a plot:
+
+
+~~~
+plot(REF)
+~~~
+{: .language-r}
+
+
+
+~~~
+Warning in xy.coords(x, y, xlabel, ylabel, log): NAs introduced by coercion
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in min(x): no non-missing arguments to min; returning Inf
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in max(x): no non-missing arguments to max; returning -Inf
+~~~
+{: .warning}
+
+
+
+~~~
+Error in plot.window(...): need finite 'ylim' values
+~~~
+{: .error}
+
+<img src="../fig/rmd-03-unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="612" style="display: block; margin: auto;" />
+
+This isn't a particularly pretty example of a plot. We'll be learning much more about creating nice, publication-quality graphics later in this lesson. 
+
+<!-- For now, let's explore how we can order -->
+<!-- the factors in our plot so that the first four values are "A", "C", "G", "T", with multi-nucleotide -->
+<!-- combinations listed alphabetically after these four. -->
+
+<!-- We can take our existing `REF` factor, and use the `factor()` -->
+<!-- function again. This time we will pass it two new arguments: `levels` will be -->
+<!-- assigned to a vector that has the REF values in the order we want them, -->
+<!-- and we will set the `ordered` argument to TRUE. -->
+
+<!-- ```{r, purl = FALSE} -->
+<!--  # order the 'REF' factor to match our desired set of levels -->
+<!-- REF <-  -->
+<!-- ```         -->
+
+<!-- We can now see the new ordering: -->
+
+<!-- ```{r, purl = FALSE} -->
+
+<!-- ``` -->
+
+<!-- Although not all levels are shown, notice there are `<` signs indicating an -->
+<!-- order. -->
 
 ## Subsetting data frames
 
@@ -462,7 +446,7 @@ where we are taking a range).
 > ## Exercise: Subsetting a data frame
 >
 > **Try the following indices and functions and try to figure out what they return**
->
+> 
 > a. `variants[1,1]`
 >
 > b. `variants[2,4]`
@@ -488,7 +472,7 @@ where we are taking a range).
 > l. `variants[variants$REF == "A",]`
 >
 >> ## Solution
->> a.
+>> a. 
 >> 
 >> ~~~
 >> variants[1,1]
@@ -498,14 +482,11 @@ where we are taking a range).
 >> 
 >> 
 >> ~~~
->> # A tibble: 1 x 1
->>   sample_id 
->>   <chr>     
->> 1 SRR2584863
+>> [1] "SRR2584863"
 >> ~~~
 >> {: .output}
->>
->> b.
+>> 
+>> b. 
 >> 
 >> ~~~
 >> variants[2,4]
@@ -515,14 +496,11 @@ where we are taking a range).
 >> 
 >> 
 >> ~~~
->> # A tibble: 1 x 1
->>   ID   
->>   <lgl>
->> 1 NA   
+>> [1] NA
 >> ~~~
 >> {: .output}
->>
->> c.
+>> 
+>> c. 
 >> 
 >> ~~~
 >> variants[801,29]
@@ -532,14 +510,11 @@ where we are taking a range).
 >> 
 >> 
 >> ~~~
->> # A tibble: 1 x 1
->>   gt_GT_alleles
->>   <chr>        
->> 1 T            
+>> [1] "T"
 >> ~~~
 >> {: .output}
->>
->> d.
+>> 
+>> d. 
 >> 
 >> ~~~
 >> variants[2, ]
@@ -549,43 +524,58 @@ where we are taking a range).
 >> 
 >> 
 >> ~~~
->> # A tibble: 1 x 29
->>   sample_id CHROM    POS ID    REF   ALT    QUAL FILTER INDEL   IDV   IMF    DP
->>   <chr>     <chr>  <dbl> <lgl> <chr> <chr> <dbl> <lgl>  <lgl> <dbl> <dbl> <dbl>
->> 1 SRR25848… CP00… 263235 NA    G     T        85 NA     FALSE    NA    NA     6
->> # … with 17 more variables: VDB <dbl>, RPB <dbl>, MQB <dbl>, BQB <dbl>,
->> #   MQSB <dbl>, SGB <dbl>, MQ0F <dbl>, ICB <lgl>, HOB <lgl>, AC <dbl>,
->> #   AN <dbl>, DP4 <chr>, MQ <dbl>, Indiv <chr>, gt_PL <dbl>, gt_GT <dbl>,
->> #   gt_GT_alleles <chr>
+>>    sample_id      CHROM    POS ID REF ALT QUAL FILTER INDEL IDV IMF DP      VDB
+>> 2 SRR2584863 CP000819.1 263235 NA   G   T   85     NA FALSE  NA  NA  6 0.096133
+>>   RPB MQB BQB MQSB       SGB     MQ0F ICB HOB AC AN     DP4 MQ
+>> 2   1   1   1   NA -0.590765 0.166667  NA  NA  1  1 0,1,0,5 33
+>>                                                                Indiv gt_PL
+>> 2 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 112,0
+>>   gt_GT gt_GT_alleles
+>> 2     1             T
 >> ~~~
 >> {: .output}
 >>
->> e.
+>> e. 
 >> 
 >> ~~~
 >> variants[-1, ]
 >> ~~~
 >> {: .language-r}
->>
+>> 
 >> 
 >> ~~~
->> # A tibble: 6 x 29
->>   sample_id CHROM    POS ID    REF   ALT    QUAL FILTER INDEL   IDV   IMF    DP
->>   <chr>     <chr>  <dbl> <lgl> <chr> <chr> <dbl> <lgl>  <lgl> <dbl> <dbl> <dbl>
->> 1 SRR25848… CP00… 2.63e5 NA    G     T        85 NA     FALSE    NA  NA       6
->> 2 SRR25848… CP00… 2.82e5 NA    G     T       217 NA     FALSE    NA  NA      10
->> 3 SRR25848… CP00… 4.33e5 NA    CTTT… CTTT…    64 NA     TRUE     12   1      12
->> 4 SRR25848… CP00… 4.74e5 NA    CCGC  CCGC…   228 NA     TRUE      9   0.9    10
->> 5 SRR25848… CP00… 6.49e5 NA    C     T       210 NA     FALSE    NA  NA      10
->> 6 SRR25848… CP00… 1.33e6 NA    C     A       178 NA     FALSE    NA  NA       8
->> # … with 17 more variables: VDB <dbl>, RPB <dbl>, MQB <dbl>, BQB <dbl>,
->> #   MQSB <dbl>, SGB <dbl>, MQ0F <dbl>, ICB <lgl>, HOB <lgl>, AC <dbl>,
->> #   AN <dbl>, DP4 <chr>, MQ <dbl>, Indiv <chr>, gt_PL <dbl>, gt_GT <dbl>,
->> #   gt_GT_alleles <chr>
+>>    sample_id      CHROM     POS ID      REF       ALT QUAL FILTER INDEL IDV IMF
+>> 2 SRR2584863 CP000819.1  263235 NA        G         T   85     NA FALSE  NA  NA
+>> 3 SRR2584863 CP000819.1  281923 NA        G         T  217     NA FALSE  NA  NA
+>> 4 SRR2584863 CP000819.1  433359 NA CTTTTTTT CTTTTTTTT   64     NA  TRUE  12 1.0
+>> 5 SRR2584863 CP000819.1  473901 NA     CCGC    CCGCGC  228     NA  TRUE   9 0.9
+>> 6 SRR2584863 CP000819.1  648692 NA        C         T  210     NA FALSE  NA  NA
+>> 7 SRR2584863 CP000819.1 1331794 NA        C         A  178     NA FALSE  NA  NA
+>>   DP      VDB RPB MQB BQB     MQSB       SGB     MQ0F ICB HOB AC AN     DP4 MQ
+>> 2  6 0.096133   1   1   1       NA -0.590765 0.166667  NA  NA  1  1 0,1,0,5 33
+>> 3 10 0.774083  NA  NA  NA 0.974597 -0.662043 0.000000  NA  NA  1  1 0,0,4,5 60
+>> 4 12 0.477704  NA  NA  NA 1.000000 -0.676189 0.000000  NA  NA  1  1 0,1,3,8 60
+>> 5 10 0.659505  NA  NA  NA 0.916482 -0.662043 0.000000  NA  NA  1  1 1,0,2,7 60
+>> 6 10 0.268014  NA  NA  NA 0.916482 -0.670168 0.000000  NA  NA  1  1 0,0,7,3 60
+>> 7  8 0.624078  NA  NA  NA 0.900802 -0.651104 0.000000  NA  NA  1  1 0,0,3,5 60
+>>                                                                Indiv gt_PL
+>> 2 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 112,0
+>> 3 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 247,0
+>> 4 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam  91,0
+>> 5 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 255,0
+>> 6 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 240,0
+>> 7 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 208,0
+>>   gt_GT gt_GT_alleles
+>> 2     1             T
+>> 3     1             T
+>> 4     1     CTTTTTTTT
+>> 5     1        CCGCGC
+>> 6     1             T
+>> 7     1             A
 >> ~~~
 >> {: .output}
 >>
->> f.
+>> f. 
 >> 
 >> ~~~
 >> variants[1:4,1]
@@ -595,17 +585,11 @@ where we are taking a range).
 >> 
 >> 
 >> ~~~
->> # A tibble: 4 x 1
->>   sample_id 
->>   <chr>     
->> 1 SRR2584863
->> 2 SRR2584863
->> 3 SRR2584863
->> 4 SRR2584863
+>> [1] "SRR2584863" "SRR2584863" "SRR2584863" "SRR2584863"
 >> ~~~
 >> {: .output}
->>
->> g.
+>> 
+>> g. 
 >> 
 >> ~~~
 >> variants[1:10,c("REF","ALT")]
@@ -615,44 +599,46 @@ where we are taking a range).
 >> 
 >> 
 >> ~~~
->> # A tibble: 10 x 2
->>    REF                          ALT                                             
->>    <chr>                        <chr>                                           
->>  1 T                            G                                               
->>  2 G                            T                                               
->>  3 G                            T                                               
->>  4 CTTTTTTT                     CTTTTTTTT                                       
->>  5 CCGC                         CCGCGC                                          
->>  6 C                            T                                               
->>  7 C                            A                                               
->>  8 G                            A                                               
->>  9 ACAGCCAGCCAGCCAGCCAGCCAGCCA… ACAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCA…
->> 10 AT                           ATT                                             
+>>                                 REF
+>> 1                                 T
+>> 2                                 G
+>> 3                                 G
+>> 4                          CTTTTTTT
+>> 5                              CCGC
+>> 6                                 C
+>> 7                                 C
+>> 8                                 G
+>> 9  ACAGCCAGCCAGCCAGCCAGCCAGCCAGCCAG
+>> 10                               AT
+>>                                                         ALT
+>> 1                                                         G
+>> 2                                                         T
+>> 3                                                         T
+>> 4                                                 CTTTTTTTT
+>> 5                                                    CCGCGC
+>> 6                                                         T
+>> 7                                                         A
+>> 8                                                         A
+>> 9  ACAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCAG
+>> 10                                                      ATT
 >> ~~~
 >> {: .output}
->>
->> h.
+>> 
+>> h. 
 >> 
 >> ~~~
 >> variants[,c("sample_id")]
 >> ~~~
 >> {: .language-r}
->>
+>> 
 >> 
 >> ~~~
->> # A tibble: 6 x 1
->>   sample_id 
->>   <chr>     
->> 1 SRR2584863
->> 2 SRR2584863
->> 3 SRR2584863
->> 4 SRR2584863
->> 5 SRR2584863
->> 6 SRR2584863
+>> [1] "SRR2584863" "SRR2584863" "SRR2584863" "SRR2584863" "SRR2584863"
+>> [6] "SRR2584863"
 >> ~~~
 >> {: .output}
 >>
->> i.
+>> i. 
 >> 
 >> ~~~
 >> head(variants)
@@ -662,23 +648,38 @@ where we are taking a range).
 >> 
 >> 
 >> ~~~
->> # A tibble: 6 x 29
->>   sample_id CHROM    POS ID    REF   ALT    QUAL FILTER INDEL   IDV   IMF    DP
->>   <chr>     <chr>  <dbl> <lgl> <chr> <chr> <dbl> <lgl>  <lgl> <dbl> <dbl> <dbl>
->> 1 SRR25848… CP00…   9972 NA    T     G        91 NA     FALSE    NA  NA       4
->> 2 SRR25848… CP00… 263235 NA    G     T        85 NA     FALSE    NA  NA       6
->> 3 SRR25848… CP00… 281923 NA    G     T       217 NA     FALSE    NA  NA      10
->> 4 SRR25848… CP00… 433359 NA    CTTT… CTTT…    64 NA     TRUE     12   1      12
->> 5 SRR25848… CP00… 473901 NA    CCGC  CCGC…   228 NA     TRUE      9   0.9    10
->> 6 SRR25848… CP00… 648692 NA    C     T       210 NA     FALSE    NA  NA      10
->> # … with 17 more variables: VDB <dbl>, RPB <dbl>, MQB <dbl>, BQB <dbl>,
->> #   MQSB <dbl>, SGB <dbl>, MQ0F <dbl>, ICB <lgl>, HOB <lgl>, AC <dbl>,
->> #   AN <dbl>, DP4 <chr>, MQ <dbl>, Indiv <chr>, gt_PL <dbl>, gt_GT <dbl>,
->> #   gt_GT_alleles <chr>
+>>    sample_id      CHROM    POS ID      REF       ALT QUAL FILTER INDEL IDV IMF
+>> 1 SRR2584863 CP000819.1   9972 NA        T         G   91     NA FALSE  NA  NA
+>> 2 SRR2584863 CP000819.1 263235 NA        G         T   85     NA FALSE  NA  NA
+>> 3 SRR2584863 CP000819.1 281923 NA        G         T  217     NA FALSE  NA  NA
+>> 4 SRR2584863 CP000819.1 433359 NA CTTTTTTT CTTTTTTTT   64     NA  TRUE  12 1.0
+>> 5 SRR2584863 CP000819.1 473901 NA     CCGC    CCGCGC  228     NA  TRUE   9 0.9
+>> 6 SRR2584863 CP000819.1 648692 NA        C         T  210     NA FALSE  NA  NA
+>>   DP       VDB RPB MQB BQB     MQSB       SGB     MQ0F ICB HOB AC AN     DP4 MQ
+>> 1  4 0.0257451  NA  NA  NA       NA -0.556411 0.000000  NA  NA  1  1 0,0,0,4 60
+>> 2  6 0.0961330   1   1   1       NA -0.590765 0.166667  NA  NA  1  1 0,1,0,5 33
+>> 3 10 0.7740830  NA  NA  NA 0.974597 -0.662043 0.000000  NA  NA  1  1 0,0,4,5 60
+>> 4 12 0.4777040  NA  NA  NA 1.000000 -0.676189 0.000000  NA  NA  1  1 0,1,3,8 60
+>> 5 10 0.6595050  NA  NA  NA 0.916482 -0.662043 0.000000  NA  NA  1  1 1,0,2,7 60
+>> 6 10 0.2680140  NA  NA  NA 0.916482 -0.670168 0.000000  NA  NA  1  1 0,0,7,3 60
+>>                                                                Indiv gt_PL
+>> 1 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 121,0
+>> 2 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 112,0
+>> 3 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 247,0
+>> 4 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam  91,0
+>> 5 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 255,0
+>> 6 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 240,0
+>>   gt_GT gt_GT_alleles
+>> 1     1             G
+>> 2     1             T
+>> 3     1             T
+>> 4     1     CTTTTTTTT
+>> 5     1        CCGCGC
+>> 6     1             T
 >> ~~~
 >> {: .output}
->>
->> j.
+>> 
+>> j. 
 >> 
 >> ~~~
 >> tail(variants)
@@ -688,23 +689,38 @@ where we are taking a range).
 >> 
 >> 
 >> ~~~
->> # A tibble: 6 x 29
->>   sample_id CHROM    POS ID    REF   ALT    QUAL FILTER INDEL   IDV   IMF    DP
->>   <chr>     <chr>  <dbl> <lgl> <chr> <chr> <dbl> <lgl>  <lgl> <dbl> <dbl> <dbl>
->> 1 SRR25890… CP00… 3.44e6 NA    G     T       184 NA     FALSE    NA    NA     9
->> 2 SRR25890… CP00… 3.48e6 NA    A     G       225 NA     FALSE    NA    NA    12
->> 3 SRR25890… CP00… 3.89e6 NA    AG    AGG     101 NA     TRUE      4     1     4
->> 4 SRR25890… CP00… 3.90e6 NA    A     AC       70 NA     TRUE      3     1     3
->> 5 SRR25890… CP00… 4.10e6 NA    A     G       177 NA     FALSE    NA    NA     8
->> 6 SRR25890… CP00… 4.43e6 NA    TGG   T       225 NA     TRUE     10     1    10
->> # … with 17 more variables: VDB <dbl>, RPB <dbl>, MQB <dbl>, BQB <dbl>,
->> #   MQSB <dbl>, SGB <dbl>, MQ0F <dbl>, ICB <lgl>, HOB <lgl>, AC <dbl>,
->> #   AN <dbl>, DP4 <chr>, MQ <dbl>, Indiv <chr>, gt_PL <dbl>, gt_GT <dbl>,
->> #   gt_GT_alleles <chr>
+>>      sample_id      CHROM     POS ID REF ALT QUAL FILTER INDEL IDV IMF DP
+>> 796 SRR2589044 CP000819.1 3444175 NA   G   T  184     NA FALSE  NA  NA  9
+>> 797 SRR2589044 CP000819.1 3481820 NA   A   G  225     NA FALSE  NA  NA 12
+>> 798 SRR2589044 CP000819.1 3893550 NA  AG AGG  101     NA  TRUE   4   1  4
+>> 799 SRR2589044 CP000819.1 3901455 NA   A  AC   70     NA  TRUE   3   1  3
+>> 800 SRR2589044 CP000819.1 4100183 NA   A   G  177     NA FALSE  NA  NA  8
+>> 801 SRR2589044 CP000819.1 4431393 NA TGG   T  225     NA  TRUE  10   1 10
+>>           VDB RPB MQB BQB     MQSB       SGB MQ0F ICB HOB AC AN     DP4 MQ
+>> 796 0.4714620  NA  NA  NA 0.992367 -0.651104    0  NA  NA  1  1 0,0,4,4 60
+>> 797 0.8707240  NA  NA  NA 1.000000 -0.680642    0  NA  NA  1  1 0,0,4,8 60
+>> 798 0.9182970  NA  NA  NA 1.000000 -0.556411    0  NA  NA  1  1 0,0,3,1 52
+>> 799 0.0221621  NA  NA  NA       NA -0.511536    0  NA  NA  1  1 0,0,3,0 60
+>> 800 0.9272700  NA  NA  NA 0.900802 -0.651104    0  NA  NA  1  1 0,0,3,5 60
+>> 801 0.7488140  NA  NA  NA 1.007750 -0.670168    0  NA  NA  1  1 0,0,4,6 60
+>>                                                                  Indiv gt_PL
+>> 796 /home/dcuser/dc_workshop/results/bam/SRR2589044.aligned.sorted.bam 214,0
+>> 797 /home/dcuser/dc_workshop/results/bam/SRR2589044.aligned.sorted.bam 255,0
+>> 798 /home/dcuser/dc_workshop/results/bam/SRR2589044.aligned.sorted.bam 131,0
+>> 799 /home/dcuser/dc_workshop/results/bam/SRR2589044.aligned.sorted.bam 100,0
+>> 800 /home/dcuser/dc_workshop/results/bam/SRR2589044.aligned.sorted.bam 207,0
+>> 801 /home/dcuser/dc_workshop/results/bam/SRR2589044.aligned.sorted.bam 255,0
+>>     gt_GT gt_GT_alleles
+>> 796     1             T
+>> 797     1             G
+>> 798     1           AGG
+>> 799     1            AC
+>> 800     1             G
+>> 801     1             T
 >> ~~~
 >> {: .output}
->>
->> k.
+>> 
+>> k. 
 >> 
 >> ~~~
 >> variants$sample_id
@@ -717,8 +733,8 @@ where we are taking a range).
 >> [6] "SRR2584863"
 >> ~~~
 >> {: .output}
->>
->> l.
+>> 
+>> l. 
 >> 
 >> ~~~
 >> variants[variants$REF == "A",]
@@ -727,19 +743,41 @@ where we are taking a range).
 >>
 >> 
 >> ~~~
->> # A tibble: 6 x 29
->>   sample_id CHROM    POS ID    REF   ALT    QUAL FILTER INDEL   IDV   IMF    DP
->>   <chr>     <chr>  <dbl> <lgl> <chr> <chr> <dbl> <lgl>  <lgl> <dbl> <dbl> <dbl>
->> 1 SRR25848… CP00… 2.41e6 NA    A     C       104 NA     FALSE    NA    NA     9
->> 2 SRR25848… CP00… 2.45e6 NA    A     C       225 NA     FALSE    NA    NA    20
->> 3 SRR25848… CP00… 2.67e6 NA    A     T       225 NA     FALSE    NA    NA    19
->> 4 SRR25848… CP00… 3.34e6 NA    A     C       211 NA     FALSE    NA    NA    10
->> 5 SRR25848… CP00… 3.48e6 NA    A     G       200 NA     FALSE    NA    NA     9
->> 6 SRR25848… CP00… 3.49e6 NA    A     C       225 NA     FALSE    NA    NA    13
->> # … with 17 more variables: VDB <dbl>, RPB <dbl>, MQB <dbl>, BQB <dbl>,
->> #   MQSB <dbl>, SGB <dbl>, MQ0F <dbl>, ICB <lgl>, HOB <lgl>, AC <dbl>,
->> #   AN <dbl>, DP4 <chr>, MQ <dbl>, Indiv <chr>, gt_PL <dbl>, gt_GT <dbl>,
->> #   gt_GT_alleles <chr>
+>>     sample_id      CHROM     POS ID REF ALT QUAL FILTER INDEL IDV IMF DP
+>> 11 SRR2584863 CP000819.1 2407766 NA   A   C  104     NA FALSE  NA  NA  9
+>> 12 SRR2584863 CP000819.1 2446984 NA   A   C  225     NA FALSE  NA  NA 20
+>> 14 SRR2584863 CP000819.1 2665639 NA   A   T  225     NA FALSE  NA  NA 19
+>> 16 SRR2584863 CP000819.1 3339313 NA   A   C  211     NA FALSE  NA  NA 10
+>> 18 SRR2584863 CP000819.1 3481820 NA   A   G  200     NA FALSE  NA  NA  9
+>> 19 SRR2584863 CP000819.1 3488669 NA   A   C  225     NA FALSE  NA  NA 13
+>>          VDB      RPB      MQB      BQB     MQSB       SGB     MQ0F ICB HOB AC
+>> 11 0.0230738 0.900802 0.150134 0.750668 0.500000 -0.590765 0.333333  NA  NA  1
+>> 12 0.0714027       NA       NA       NA 1.000000 -0.689466 0.000000  NA  NA  1
+>> 14 0.9960390       NA       NA       NA 1.000000 -0.690438 0.000000  NA  NA  1
+>> 16 0.4059360       NA       NA       NA 1.007750 -0.670168 0.000000  NA  NA  1
+>> 18 0.1070810       NA       NA       NA 0.974597 -0.662043 0.000000  NA  NA  1
+>> 19 0.0162706       NA       NA       NA 1.000000 -0.680642 0.000000  NA  NA  1
+>>    AN      DP4 MQ
+>> 11  1  3,0,3,2 25
+>> 12  1 0,0,10,6 60
+>> 14  1 0,0,12,5 60
+>> 16  1  0,0,4,6 60
+>> 18  1  0,0,4,5 60
+>> 19  1  0,0,8,4 60
+>>                                                                 Indiv gt_PL
+>> 11 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 131,0
+>> 12 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 255,0
+>> 14 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 255,0
+>> 16 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 241,0
+>> 18 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 230,0
+>> 19 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 255,0
+>>    gt_GT gt_GT_alleles
+>> 11     1             C
+>> 12     1             C
+>> 14     1             T
+>> 16     1             C
+>> 18     1             G
+>> 19     1             C
 >> ~~~
 >> {: .output}
 > {: .solution}
@@ -760,7 +798,7 @@ them to a new object name:
 
 
 ~~~
-# create a new data frame containing only observations from SRR2584863
+# create a new data frame containing only observations from SRR2584863 
 
 SRR2584863_variants <- variants[variants$sample_id == "SRR2584863",]
 
@@ -837,14 +875,14 @@ summary(SRR2584863_variants)
                 3rd Qu.:1   3rd Qu.:1                      3rd Qu.:60.00  
                 Max.   :1   Max.   :1                      Max.   :60.00  
                                                                           
-    Indiv               gt_PL           gt_GT   gt_GT_alleles     
- Length:25          Min.   :  601   Min.   :1   Length:25         
- Class :character   1st Qu.: 1940   1st Qu.:1   Class :character  
- Mode  :character   Median : 2470   Median :1   Mode  :character  
-                    Mean   : 2432   Mean   :1                     
-                    3rd Qu.: 2550   3rd Qu.:1                     
-                    Max.   :11128   Max.   :1                     
-                                                                  
+    Indiv              gt_PL               gt_GT   gt_GT_alleles     
+ Length:25          Length:25          Min.   :1   Length:25         
+ Class :character   Class :character   1st Qu.:1   Class :character  
+ Mode  :character   Mode  :character   Median :1   Mode  :character  
+                                       Mean   :1                     
+                                       3rd Qu.:1                     
+                                       Max.   :1                     
+                                                                     
 ~~~
 {: .output}
 
@@ -1078,7 +1116,7 @@ like this one:
 
 ~~~
 # make the 'REF' column a character type column
-
+ 
 variants$REF <- as.character(variants$REF)
 
 # check the type of the column
@@ -1163,7 +1201,7 @@ head(sorted_by_DP$DP)
 > The `order()` function lists values in increasing order by default. Look at the documentation
 > for this function and change `sorted_by_DP` to start with variants with the greatest filtered
 > depth ("DP").
->
+> 
 > > ## Solution
 > > 
 > > ~~~
@@ -1181,6 +1219,10 @@ head(sorted_by_DP$DP)
 > {: .solution}
 {: .challenge}
 
+<!-- You can selectively replace values in a data frame based on their value: -->
+
+<!-- ```{r} -->
+<!-- ``` -->
 
 You can rename columns:
 
@@ -1222,3 +1264,201 @@ The `write.csv()` function has some additional arguments listed in the help, but
 at a minimum you need to tell it what data frame to write to file, and give a
 path to a file name in quotes (if you only provide a file name, the file will
 be written in the current working directory).
+
+## Importing data from Excel
+
+Excel is one of the most common formats, so we need to discuss how to make
+these files play nicely with R. The simplest way to import data from Excel is
+to **save your Excel file in .csv format***. You can then import into R right
+away. Sometimes you may not be able to do this (imagine you have data in 300
+Excel files, are you going to open and export all of them?).
+
+One common R package (a set of code with features you can download and add to
+your R installation) is the [readxl package](https://CRAN.R-project.org/package=readxl) which can open and import Excel
+files. Rather than addressing package installation this second (we'll discuss this soon!), we can take
+advantage of RStudio's import feature which integrates this package. (Note:
+this feature is available only in the latest versions of RStudio such as is
+installed on our cloud instance).
+
+First, in the RStudio menu go to **File**, select **Import Dataset**, and
+choose **From Excel...** (notice there are several other options you can
+explore).
+
+<img src="../fig/rstudio_import_menu.png " alt="rstudio import menu" style="width: 600px;"/>
+
+Next, under **File/Url:** click the <KBD>Browse</KBD> button and navigate to the **Ecoli_metadata.xlsx** file located at `/home/dcuser/dc_sample_data/R`.
+You should now see a preview of the data to be imported:
+
+<img src="../fig/rstudio_import_screen.png " alt="rstudio import screen" style="width: 1200px;"/>
+
+Notice that you have the option to change the data type of each variable by
+clicking arrow (drop-down menu) next to each column title. Under **Import
+Options** you may also rename the data, choose a different sheet to import, and
+choose how you will handle headers and skipped rows. Under **Code Preview** you
+can see the code that will be used to import this file. We could have written
+this code and imported the Excel file without the RStudio import function, but
+now you can choose your preference.
+
+In this exercise, we will leave the title of the data frame as
+**Ecoli_metadata**, and there are no other options we need to adjust. Click the
+<KBD>Import</KBD> button to import the data.
+
+Finally, let's check the first few lines of the `Ecoli_metadata` data
+frame:
+
+
+~~~
+Error: `path` does not exist: '../data/Ecoli_metadata.xlsx'
+~~~
+{: .error}
+
+
+~~~
+head(Ecoli_metadata)
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in head(Ecoli_metadata): object 'Ecoli_metadata' not found
+~~~
+{: .error}
+
+The type of this object is 'tibble', a type of data
+frame we will talk more about in the 'dplyr' section. If you needed
+a true R data frame you could coerce with `as.data.frame()`.
+
+> ## Exercise: Putting it all together - data frames
+>
+> **Using the `Ecoli_metadata` data frame created above, answer the following questions**
+>
+> A) What are the dimensions (# rows, # columns) of the data frame?
+>
+> B) What are categories are there in the `cit` column? *hint*: treat column as factor
+>
+> C) How many of each of the `cit` categories are there?
+>
+> D) What is the genome size for the 7th observation in this data set?
+>
+> E) What is the median value of the variable `genome_size`
+>
+> F) Rename the column `sample` to `sample_id`
+>
+> G) Create a new column (name genome_size_bp) and set it equal to the genome_size multiplied by 1,000,000
+>
+> H) Save the edited Ecoli_metadata data frame as "exercise_solution.csv" in your current working directory.
+>
+>> ## Solution
+>> 
+>> ~~~
+>> dim(Ecoli_metadata)
+>> ~~~
+>> {: .language-r}
+>> 
+>> 
+>> 
+>> ~~~
+>> Error in eval(expr, envir, enclos): object 'Ecoli_metadata' not found
+>> ~~~
+>> {: .error}
+>> 
+>> 
+>> 
+>> ~~~
+>> levels(as.factor(Ecoli_metadata$cit))
+>> ~~~
+>> {: .language-r}
+>> 
+>> 
+>> 
+>> ~~~
+>> Error in is.factor(x): object 'Ecoli_metadata' not found
+>> ~~~
+>> {: .error}
+>> 
+>> 
+>> 
+>> ~~~
+>> table(as.factor(Ecoli_metadata$cit))
+>> ~~~
+>> {: .language-r}
+>> 
+>> 
+>> 
+>> ~~~
+>> Error in is.factor(x): object 'Ecoli_metadata' not found
+>> ~~~
+>> {: .error}
+>> 
+>> 
+>> 
+>> ~~~
+>> Ecoli_metadata[7,7]
+>> ~~~
+>> {: .language-r}
+>> 
+>> 
+>> 
+>> ~~~
+>> Error in eval(expr, envir, enclos): object 'Ecoli_metadata' not found
+>> ~~~
+>> {: .error}
+>> 
+>> 
+>> 
+>> ~~~
+>> median(Ecoli_metadata$genome_size)
+>> ~~~
+>> {: .language-r}
+>> 
+>> 
+>> 
+>> ~~~
+>> Error in median(Ecoli_metadata$genome_size): object 'Ecoli_metadata' not found
+>> ~~~
+>> {: .error}
+>> 
+>> 
+>> 
+>> ~~~
+>> colnames(Ecoli_metadata)[colnames(Ecoli_metadata) == "sample"] <- "sample_id"
+>> ~~~
+>> {: .language-r}
+>> 
+>> 
+>> 
+>> ~~~
+>> Error in colnames(Ecoli_metadata)[colnames(Ecoli_metadata) == "sample"] <- "sample_id": object 'Ecoli_metadata' not found
+>> ~~~
+>> {: .error}
+>> 
+>> 
+>> 
+>> ~~~
+>> Ecoli_metadata$genome_size_bp <- Ecoli_metadata$genome_size * 1000000
+>> ~~~
+>> {: .language-r}
+>> 
+>> 
+>> 
+>> ~~~
+>> Error in eval(expr, envir, enclos): object 'Ecoli_metadata' not found
+>> ~~~
+>> {: .error}
+>> 
+>> 
+>> 
+>> ~~~
+>> write.csv(Ecoli_metadata, file = "exercise_solution.csv")
+>> ~~~
+>> {: .language-r}
+>> 
+>> 
+>> 
+>> ~~~
+>> Error in is.data.frame(x): object 'Ecoli_metadata' not found
+>> ~~~
+>> {: .error}
+> {: .solution}
+{: .challenge}
