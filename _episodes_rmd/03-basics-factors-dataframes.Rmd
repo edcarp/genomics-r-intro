@@ -18,11 +18,9 @@ objectives:
 - "Be able to manipulate a factor, including subsetting and reordering"
 - "Be able to apply an arithmetic function to a data frame"
 - "Be able to coerce the class of an object (including variables in a data frame)"
-- "Be able to import data from Excel"
 - "Be able to save a data frame as a delimited file"
 keypoints:
-- "It is easy to import data into R from tabular formats including Excel.
-  However, you still need to check that R has imported and interpreted your
+- "It is easy to import data into R from tabular formats into R. However, you still need to check that R has imported and interpreted your
   data correctly"
 - "There are best practices for organizing your data (keeping it tidy) and R
   is great for this"
@@ -569,10 +567,6 @@ head(sorted_by_DP$DP)
 > {: .solution}
 {: .challenge}
 
-<!-- You can selectively replace values in a data frame based on their value: -->
-
-<!-- ```{r} -->
-<!-- ``` -->
 
 You can rename columns:
 
