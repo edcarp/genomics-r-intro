@@ -197,7 +197,7 @@ environment:
 
 >## Tip: Uploads and downloads in the cloud
 > In the "Files" tab you can select a file and download it from your cloud
-> instance (click the "more" button) to your local computer.
+> instance (click the "more" button and "Export") to your local computer.
 > Uploads are also possible.
 {: .callout}
 
