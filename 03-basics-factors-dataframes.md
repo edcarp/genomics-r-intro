@@ -10,7 +10,7 @@ questions:
 - "How do I save tabular data generated in R?"
 objectives:
 - "Explain the basic principle of tidy datasets"
-- "Be able to load a tabular dataset using base R functions"
+- "Be able to load a tabular dataset using flexible functions"
 - "Be able to determine the structure of a data frame including its dimensions
   and the datatypes of variables"
 - "Be able to subset/retrieve values from a data frame"
@@ -112,31 +112,26 @@ library("readr")          ## load
 *You only need to install a package once per computer, but you need to load it
 every time you open a new R session and want to use that package.*
 
-There are a couple of differences between the two csv-reading functions, but `read_csv()` is faster for large datasets, as well as having the data imported in a 'tidier' format (more on this later!). 
+There are a couple of differences between the two csv-reading functions, but `read_csv()` is faster for large datasets, as well as having the data imported in a 'tidier' format (more on this later!).
 
 Note: We can use "two colon" notation to describe which external (ie non-"base-R") package a function comes from, like this: `readr::read_csv()`. This helps us keep track of which function comes from which package - handy if we're mixing and matching, and sharing our code with others who might not be familiar with that function.
 
-
-
-#For our purpose here, we will focus on using the tools every R installation comes with (so called "base" R) to import a comma-delimited file containing the results of our variant calling workflow.
-#We will need to load the sheet using a function called `read.csv()`.
-
-> ## Exercise: Review the arguments of the `read.csv()` function
+> ## Exercise: Review the arguments of the `read_csv()` function
 >
-> **Before using the `read.csv()` function, use R's help feature to answer the
+> **Before using the `read_csv()` function, use R's help feature to answer the
 > following questions**.
 >
 > *Hint*: Entering '?' before the function name and then running that line will
 > bring up the help documentation. Also, when reading this particular help
-> be careful to pay attention to the 'read.csv' expression under the 'Usage'
+> be careful to pay attention to the 'read_csv' expression under the 'Usage'
 > heading. Other answers will be in the 'Arguments' heading.
 >
-> A) What is the default parameter for 'header' in the `read.csv()` function?
+> A) What is the default parameter for 'col_names' in the `read_csv()` function?
 >
-> B) What argument would you have to change to read a file that was delimited
-> by semicolons (;) rather than commas?
+> B) How might you have to change the function to read a file that was delimited
+> by semicolons (;) rather than commas? What do you learn about the function `read_csv()`?
 >
-> C) What argument would you have to change to read file in which numbers
+> C) How might you have to change the function to read in a file in which numbers
 > used commas for decimal separation (i.e. 1,00)?
 >
 > D) What argument would you have to change to read in only the first 10,000 rows
@@ -144,33 +139,35 @@ Note: We can use "two colon" notation to describe which external (ie non-"base-R
 >
 >> ## Solution
 >>
->> A) The `read.csv()` function has the argument 'header' set to TRUE by default,
+>> A) The `read_csv()` function has the argument `col_names` set to TRUE by default,
 >> this means the function always assumes the first row is header information,
 >> (i.e. column names)
 >>
->> B) The `read.csv()` function has the argument 'sep' set to ",". This means
+>> B) Looking at the information in the function description, we learn that
+>> `read_csv()` is a a "version" or "special case" of the function `read_delim()`,
+>> in which the `delim` argument (the separator) is set to `,`. This means
 >> the function assumes commas are used as delimiters, as you would expect.
->> Changing this parameter (e.g. `sep=";"`) would now interpret semicolons as
->> delimiters.
+>> Changing this parameter (e.g. `delim=";"`) would now interpret semicolons as
+>> delimiters when using the `read_delim()` function.
 >>
->> C) Although it is not listed in the `read.csv()` usage, `read.csv()` is
->> a "version" of the function `read.table()` and accepts all its arguments.
->> If you set `dec=","` you could change the decimal operator. We'd probably
->> assume the delimiter is some other character.
+>> C) Reading more in the description about the usage of `read_csv()` and other
+>> functions related to `read_delim()`, you can see that `read_csv2()` would
+>> let us use the comma as our decimal point (aka "decimal operator").
+>> We can see that the `read_csv2()` function also uses `;` as the field separator.
 >>
->> D) You can set `nrow` to a numeric value (e.g. `nrow=10000`) to choose how
+>> D) You can set `n_max` to a numeric value (e.g. `nrow=10000`) to choose how
 >> many rows of a file you read in. This may be useful for very large files
 >> where not all the data is needed to test some data cleaning steps you are
 >> applying.
 >>
 >> Hopefully, this exercise gets you thinking about using the provided help
->> documentation in R. There are many arguments that exist, but which we wont
+>> documentation in R. There are many arguments that exist, but which we won't
 >> have time to cover. Look here to get familiar with functions you use
 >> frequently, you may be surprised at what you find they can do.
 > {: .solution}
 {: .challenge}
 
-Now, let's read in a data file from a [figshare](https://figshare.com/) instance which holds our dataset. We'll call this data `variants`. The argument we're passing (wrapped in quotes) to our `read_csv()` function is the file path or URL for our data. This tells the function where to access the .csv file. 
+Now, let's read in a data file from a [figshare](https://figshare.com/) instance which holds our dataset. We'll call this data `variants`. The argument we're passing (wrapped in quotes) to our `read_csv()` function is the file path or URL for our data. This tells the function where to access the .csv file.
 
 
 ~~~
@@ -243,7 +240,7 @@ summary(variants)
                                        Mean   :2243682                 
                                        3rd Qu.:3317082                 
                                        Max.   :4629225                 
-                                                                       
+
      REF                ALT                 QUAL          FILTER       
  Length:801         Length:801         Min.   :  4.385   Mode:logical  
  Class :character   Class :character   1st Qu.:139.000   NA's:801      
@@ -251,7 +248,7 @@ summary(variants)
                                        Mean   :172.276                 
                                        3rd Qu.:225.000                 
                                        Max.   :228.000                 
-                                                                       
+
    INDEL              IDV              IMF               DP       
  Mode :logical   Min.   : 2.000   Min.   :0.5714   Min.   : 2.00  
  FALSE:700       1st Qu.: 7.000   1st Qu.:0.8824   1st Qu.: 7.00  
@@ -283,7 +280,7 @@ summary(variants)
                 Mean   :1   Mean   :1                      Mean   :58.19  
                 3rd Qu.:1   3rd Qu.:1                      3rd Qu.:60.00  
                 Max.   :1   Max.   :1                      Max.   :60.00  
-                                                                          
+
     Indiv               gt_PL            gt_GT   gt_GT_alleles     
  Length:801         Min.   :   310   Min.   :1   Length:801        
  Class :character   1st Qu.:  1760   1st Qu.:1   Class :character  
@@ -291,7 +288,7 @@ summary(variants)
                     Mean   :  3392   Mean   :1                     
                     3rd Qu.:  2550   3rd Qu.:1                     
                     Max.   :255156   Max.   :1                     
-                                                                   
+
 ~~~
 {: .output}
 
@@ -387,7 +384,7 @@ tibble [801 × 29] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
 Ok, thats a lot up unpack! Some things to notice.
 
 - the object type `tibble` is displayed in the first row along with its
-  dimensions, in this case 801 observations (rows) and 29 variables (columns) - a `tibble` is a 'tidy' format of data frame which has slightly nicer printing. 
+  dimensions, in this case 801 observations (rows) and 29 variables (columns) - a `tibble` is a 'tidy' format of data frame which has slightly nicer printing.
 - Each variable (column) has a name (e.g. `sample_id`). This is followed
   by the object mode (e.g. factor, int, num, etc.). Notice that before each
   variable name there is a `$` - this will be important later.
@@ -489,31 +486,31 @@ where we are taking a range).
 >
 >> ## Solution
 >> a.
->> 
+>>
 >> ~~~
 >> variants[1,1]
 >> ~~~
 >> {: .language-r}
->> 
->> 
->> 
+>>
+>>
+>>
 >> ~~~
 >> # A tibble: 1 x 1
->>   sample_id 
+>>   sample_id
 >>   <chr>     
 >> 1 SRR2584863
 >> ~~~
 >> {: .output}
 >>
 >> b.
->> 
+>>
 >> ~~~
 >> variants[2,4]
 >> ~~~
 >> {: .language-r}
->> 
->> 
->> 
+>>
+>>
+>>
 >> ~~~
 >> # A tibble: 1 x 1
 >>   ID   
@@ -523,14 +520,14 @@ where we are taking a range).
 >> {: .output}
 >>
 >> c.
->> 
+>>
 >> ~~~
 >> variants[801,29]
 >> ~~~
 >> {: .language-r}
->> 
->> 
->> 
+>>
+>>
+>>
 >> ~~~
 >> # A tibble: 1 x 1
 >>   gt_GT_alleles
@@ -540,14 +537,14 @@ where we are taking a range).
 >> {: .output}
 >>
 >> d.
->> 
+>>
 >> ~~~
 >> variants[2, ]
 >> ~~~
 >> {: .language-r}
->> 
->> 
->> 
+>>
+>>
+>>
 >> ~~~
 >> # A tibble: 1 x 29
 >>   sample_id CHROM    POS ID    REF   ALT    QUAL FILTER INDEL   IDV   IMF    DP
@@ -561,13 +558,13 @@ where we are taking a range).
 >> {: .output}
 >>
 >> e.
->> 
+>>
 >> ~~~
 >> variants[-1, ]
 >> ~~~
 >> {: .language-r}
 >>
->> 
+>>
 >> ~~~
 >> # A tibble: 6 x 29
 >>   sample_id CHROM    POS ID    REF   ALT    QUAL FILTER INDEL   IDV   IMF    DP
@@ -586,17 +583,17 @@ where we are taking a range).
 >> {: .output}
 >>
 >> f.
->> 
+>>
 >> ~~~
 >> variants[1:4,1]
 >> ~~~
 >> {: .language-r}
->> 
->> 
->> 
+>>
+>>
+>>
 >> ~~~
 >> # A tibble: 4 x 1
->>   sample_id 
+>>   sample_id
 >>   <chr>     
 >> 1 SRR2584863
 >> 2 SRR2584863
@@ -606,14 +603,14 @@ where we are taking a range).
 >> {: .output}
 >>
 >> g.
->> 
+>>
 >> ~~~
 >> variants[1:10,c("REF","ALT")]
 >> ~~~
 >> {: .language-r}
->> 
->> 
->> 
+>>
+>>
+>>
 >> ~~~
 >> # A tibble: 10 x 2
 >>    REF                          ALT                                             
@@ -632,16 +629,16 @@ where we are taking a range).
 >> {: .output}
 >>
 >> h.
->> 
+>>
 >> ~~~
 >> variants[,c("sample_id")]
 >> ~~~
 >> {: .language-r}
 >>
->> 
+>>
 >> ~~~
 >> # A tibble: 6 x 1
->>   sample_id 
+>>   sample_id
 >>   <chr>     
 >> 1 SRR2584863
 >> 2 SRR2584863
@@ -653,14 +650,14 @@ where we are taking a range).
 >> {: .output}
 >>
 >> i.
->> 
+>>
 >> ~~~
 >> head(variants)
 >> ~~~
 >> {: .language-r}
->> 
->> 
->> 
+>>
+>>
+>>
 >> ~~~
 >> # A tibble: 6 x 29
 >>   sample_id CHROM    POS ID    REF   ALT    QUAL FILTER INDEL   IDV   IMF    DP
@@ -679,14 +676,14 @@ where we are taking a range).
 >> {: .output}
 >>
 >> j.
->> 
+>>
 >> ~~~
 >> tail(variants)
 >> ~~~
 >> {: .language-r}
->> 
->> 
->> 
+>>
+>>
+>>
 >> ~~~
 >> # A tibble: 6 x 29
 >>   sample_id CHROM    POS ID    REF   ALT    QUAL FILTER INDEL   IDV   IMF    DP
@@ -705,13 +702,13 @@ where we are taking a range).
 >> {: .output}
 >>
 >> k.
->> 
+>>
 >> ~~~
 >> variants$sample_id
 >> ~~~
 >> {: .language-r}
 >>
->> 
+>>
 >> ~~~
 >> [1] "SRR2584863" "SRR2584863" "SRR2584863" "SRR2584863" "SRR2584863"
 >> [6] "SRR2584863"
@@ -719,13 +716,13 @@ where we are taking a range).
 >> {: .output}
 >>
 >> l.
->> 
+>>
 >> ~~~
 >> variants[variants$REF == "A",]
 >> ~~~
 >> {: .language-r}
 >>
->> 
+>>
 >> ~~~
 >> # A tibble: 6 x 29
 >>   sample_id CHROM    POS ID    REF   ALT    QUAL FILTER INDEL   IDV   IMF    DP
@@ -796,7 +793,7 @@ summary(SRR2584863_variants)
                                        Mean   :2464989                 
                                        3rd Qu.:3488669                 
                                        Max.   :4616538                 
-                                                                       
+
      REF                ALT                 QUAL         FILTER       
  Length:25          Length:25          Min.   : 31.89   Mode:logical  
  Class :character   Class :character   1st Qu.:104.00   NA's:25       
@@ -804,7 +801,7 @@ summary(SRR2584863_variants)
                                        Mean   :172.97                 
                                        3rd Qu.:225.00                 
                                        Max.   :228.00                 
-                                                                      
+
    INDEL              IDV             IMF               DP      
  Mode :logical   Min.   : 2.00   Min.   :0.6667   Min.   : 2.0  
  FALSE:19        1st Qu.: 3.25   1st Qu.:0.9250   1st Qu.: 9.0  
@@ -836,7 +833,7 @@ summary(SRR2584863_variants)
                 Mean   :1   Mean   :1                      Mean   :55.52  
                 3rd Qu.:1   3rd Qu.:1                      3rd Qu.:60.00  
                 Max.   :1   Max.   :1                      Max.   :60.00  
-                                                                          
+
     Indiv               gt_PL           gt_GT   gt_GT_alleles     
  Length:25          Min.   :  601   Min.   :1   Length:25         
  Class :character   1st Qu.: 1940   1st Qu.:1   Class :character  
@@ -844,7 +841,7 @@ summary(SRR2584863_variants)
                     Mean   : 2432   Mean   :1                     
                     3rd Qu.: 2550   3rd Qu.:1                     
                     Max.   :11128   Max.   :1                     
-                                                                  
+
 ~~~
 {: .output}
 
@@ -1107,13 +1104,15 @@ Lets summarize this section on coercion with a few take home messages.
 - Check the structure (`str()`) of your data frames before working with them!
 
 Regarding the first bullet point, one way to avoid needless coercion when
-importing a data frame using any one of the `read.table()` functions such as
-`read.csv()` is to set the argument `StringsAsFactors` to FALSE. By default,
-this argument is TRUE. Setting it to FALSE will treat any non-numeric column to
-a character type. `read.csv()` documentation, you will also see you can
-explicitly type your columns using the `colClasses` argument. Other R packages
-(such as the Tidyverse "readr") don't have this particular conversion issue,
-but many packages will still try to guess a  data type.
+importing a data frame is to use functions which  won't attempt to convert your
+data types, such as the `read_csv()` function, or others from the `readr` package we used earlier.
+This is preferrable to using any one of the `read.table()` functions such as
+`read.csv()` which by default have the argument `StringsAsFactors` set to TRUE.
+
+If you do use the `read.table()` functions from Base R, always ensure you set
+the argument `StringsAsFactors` to FALSE. Setting it to FALSE will treat any
+non-numeric column to a character type. In the `read.csv()` documentation, you
+will also see you can explicitly type your columns using the `colClasses` argument.
 
 ## Data frame bonus material: math, sorting, renaming
 
@@ -1165,15 +1164,15 @@ head(sorted_by_DP$DP)
 > depth ("DP").
 >
 > > ## Solution
-> > 
+> >
 > > ~~~
 > > sorted_by_DP <- variants[order(variants$DP, decreasing = TRUE), ]
 > > head(sorted_by_DP$DP)
 > > ~~~
 > > {: .language-r}
-> > 
-> > 
-> > 
+> >
+> >
+> >
 > > ~~~
 > > [1] 79 46 41 29 29 27
 > > ~~~

@@ -40,10 +40,10 @@ R working.
 > ## Tip: Install R and RStudio locally anyway
 >
 > These lessons are designed to use an online RStudio server. This simplifies
-> installation and running of the workshop - but servers can go down 
+> installation and running of the workshop - but servers can go down
 > during workshops.
-> If you are using your own computer for this lesson, please install a local copy 
-> of both R ([download R](https://www.stats.bris.ac.uk/R/)) 
+> If you are using your own computer for this lesson, please install a local copy
+> of both R ([download R](https://www.stats.bris.ac.uk/R/))
 > and RStudio ([download RStudio desktop](https://rstudio.com/products/rstudio/)).
 > After the workshop, this enables you to keep analysing data on your local computer.
 {: .callout}
@@ -121,7 +121,7 @@ You should now see the RStudio interface:
 
 <img src="../fig/rstudio_session_default.png" alt="rstudio default session" style="width:1000px;"/>
 
-> ## Tip: If you get disconnected, you should be able to return to 
+> ## Tip: If you get disconnected, you should be able to return to
 > [noteable login](https://noteable.edina.ac.uk/login/) and
 > reconnect to the same session later.
 {: .callout}
@@ -241,7 +241,7 @@ In the Console, we expect to see the following output, below the instruction you
 ~~~
 {: .output}
 
-NOTE: In the output, `dcuser` represents your username, however if you are using the University of Edinburgh's *Notable* service, this will be replaced by `jovyan` due to how the service is set up. 
+NOTE: In the output, `dcuser` represents your username, however if you are using the University of Edinburgh's *Notable* service, this will be replaced by `jovyan` due to how the service is set up.
 
 Since we will be learning several commands, we may already want to keep some
 short notes in our script to explain the purpose of the command. Entering a `#`
@@ -379,7 +379,7 @@ name:
 {: .language-r}
 
 The "Help" tab will show you information (often, too much information). You
-will slowly learn how to read and make sense of help files. Checking the "Usage" or "Examples" 
+will slowly learn how to read and make sense of help files. Checking the "Usage" or "Examples"
 headings is often a good place to look first. If you look under "Arguments," we
 also see what arguments we can pass to this function to modify its behavior.
 You can also see a function's argument using the `args()` function:
@@ -393,12 +393,12 @@ args(round)
 
 
 ~~~
-function (x, digits = 0) 
+function (x, digits = 0)
 NULL
 ~~~
 {: .output}
 
-`round()` takes two arguments, `x`, which is the number to be 
+`round()` takes two arguments, `x`, which is the number to be
 rounded, and a
 `digits` argument. The `=` sign indicates that a default (in this case 0) is
 already set. Since `x` is not set, `round()` requires we provide it, in contrast

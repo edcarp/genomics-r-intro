@@ -8,7 +8,7 @@ questions:
 - "How do I save tabular data generated in R?"
 objectives:
 - "Explain the basic principle of tidy datasets"
-- "Be able to load a tabular dataset using base R functions"
+- "Be able to load a tabular dataset using flexible functions"
 - "Be able to determine the structure of a data frame including its dimensions
   and the datatypes of variables"
 - "Be able to subset/retrieve values from a data frame"
@@ -18,11 +18,9 @@ objectives:
 - "Be able to manipulate a factor, including subsetting and reordering"
 - "Be able to apply an arithmetic function to a data frame"
 - "Be able to coerce the class of an object (including variables in a data frame)"
-- "Be able to import data from Excel"
 - "Be able to save a data frame as a delimited file"
 keypoints:
-- "It is easy to import data into R from tabular formats including Excel.
-  However, you still need to check that R has imported and interpreted your
+- "It is easy to import data into R from tabular formats into R. However, you still need to check that R has imported and interpreted your
   data correctly"
 - "There are best practices for organizing your data (keeping it tidy) and R
   is great for this"
@@ -84,27 +82,53 @@ in your analysis, and its reproducibility.
  {: .callout}
 
 ## Importing tabular data into R
-There are several ways to import data into R. For our purpose here, we will
-focus on using the tools every R installation comes with (so called "base" R) to
-import a comma-delimited file containing the results of our variant calling workflow.
-We will need to load the sheet using a function called `read.csv()`.
+There are several ways to import data into R.
 
-> ## Exercise: Review the arguments of the `read.csv()` function
+Every R installation comes with a set of ready-made tools - known as "base" R.  An example of this is the function called `read.csv()`, which would allow us to import a comma-delimited file containing the results of our variant calling workflow.
+
+However, as we're focussing more on genomics data and these datasets are often quite large, we're going to use an alternative function from the `readr` R package, called `read_csv()`.
+
+Packages in R are sets of additional functions that let you do more
+stuff in R. Some functions we'll use later come built into R;
+packages give you access to more functions. You need to install a package and
+then load it to be able to use it.
+
+To access the `read_csv()` function, we need to make sure we have the `readr` R package installed and loaded.
+
+```{r, eval = FALSE, purl = FALSE}
+install.packages("readr") ## install
+```
+
+You might get asked to choose a CRAN mirror -- this is asking you to
+choose a site to download the package from. The choice doesn't matter too much; I'd recommend choosing the RStudio mirror.
+
+```{r, message = FALSE, purl = FALSE}
+library("readr")          ## load
+```
+
+*You only need to install a package once per computer, but you need to load it
+every time you open a new R session and want to use that package.*
+
+There are a couple of differences between the two csv-reading functions, but `read_csv()` is faster for large datasets, as well as having the data imported in a 'tidier' format (more on this later!).
+
+Note: We can use "two colon" notation to describe which external (ie non-"base-R") package a function comes from, like this: `readr::read_csv()`. This helps us keep track of which function comes from which package - handy if we're mixing and matching, and sharing our code with others who might not be familiar with that function.
+
+> ## Exercise: Review the arguments of the `read_csv()` function
 >
-> **Before using the `read.csv()` function, use R's help feature to answer the
+> **Before using the `read_csv()` function, use R's help feature to answer the
 > following questions**.
 >
 > *Hint*: Entering '?' before the function name and then running that line will
 > bring up the help documentation. Also, when reading this particular help
-> be careful to pay attention to the 'read.csv' expression under the 'Usage'
+> be careful to pay attention to the 'read_csv' expression under the 'Usage'
 > heading. Other answers will be in the 'Arguments' heading.
 >
-> A) What is the default parameter for 'header' in the `read.csv()` function?
+> A) What is the default parameter for 'col_names' in the `read_csv()` function?
 >
-> B) What argument would you have to change to read a file that was delimited
-> by semicolons (;) rather than commas?
+> B) How might you have to change the function to read a file that was delimited
+> by semicolons (;) rather than commas? What do you learn about the function `read_csv()`?
 >
-> C) What argument would you have to change to read file in which numbers
+> C) How might you have to change the function to read in a file in which numbers
 > used commas for decimal separation (i.e. 1,00)?
 >
 > D) What argument would you have to change to read in only the first 10,000 rows
@@ -112,50 +136,51 @@ We will need to load the sheet using a function called `read.csv()`.
 >
 >> ## Solution
 >>
->> A) The `read.csv()` function has the argument 'header' set to TRUE by default,
+>> A) The `read_csv()` function has the argument `col_names` set to TRUE by default,
 >> this means the function always assumes the first row is header information,
 >> (i.e. column names)
 >>
->> B) The `read.csv()` function has the argument 'sep' set to ",". This means
+>> B) Looking at the information in the function description, we learn that
+>> `read_csv()` is a a "version" or "special case" of the function `read_delim()`,
+>> in which the `delim` argument (the separator) is set to `,`. This means
 >> the function assumes commas are used as delimiters, as you would expect.
->> Changing this parameter (e.g. `sep=";"`) would now interpret semicolons as
->> delimiters.
+>> Changing this parameter (e.g. `delim=";"`) would now interpret semicolons as
+>> delimiters when using the `read_delim()` function.
 >>
->> C) Although it is not listed in the `read.csv()` usage, `read.csv()` is
->> a "version" of the function `read.table()` and accepts all its arguments.
->> If you set `dec=","` you could change the decimal operator. We'd probably
->> assume the delimiter is some other character.
+>> C) Reading more in the description about the usage of `read_csv()` and other
+>> functions related to `read_delim()`, you can see that `read_csv2()` would
+>> let us use the comma as our decimal point (aka "decimal operator").
+>> We can see that the `read_csv2()` function also uses `;` as the field separator.
 >>
->> D) You can set `nrow` to a numeric value (e.g. `nrow=10000`) to choose how
+>> D) You can set `n_max` to a numeric value (e.g. `nrow=10000`) to choose how
 >> many rows of a file you read in. This may be useful for very large files
 >> where not all the data is needed to test some data cleaning steps you are
 >> applying.
 >>
 >> Hopefully, this exercise gets you thinking about using the provided help
+<<<<<<< HEAD
 >> documentation in R. There are many arguments that exist, but which we wont
+=======
+>> documentation in R. There are many arguments that exist, but which we won't
+>>>>>>> update-lesson-03
 >> have time to cover. Look here to get familiar with functions you use
 >> frequently, you may be surprised at what you find they can do.
 > {: .solution}
 {: .challenge}
 
-Now, let's read in the file `combined_tidy_vcf.csv` which will be located in
-`/home/dcuser/.solutions/R_data/`. Call this data `variants`. The
-first argument to pass to our `read.csv()` function is the file path for our
-data. The file path must be in quotes and now is a good time to remember to
-use tab autocompletion. **If you use tab autocompletion you avoid typos and
-errors in file paths.** Use it!
+Now, let's read in a data file from a [figshare](https://figshare.com/) instance which holds our dataset. We'll call this data `variants`. The argument we're passing (wrapped in quotes) to our `read_csv()` function is the file path or URL for our data. This tells the function where to access the .csv file.
 
 ```{r, eval = FALSE, purl = FALSE}
 ## read in a CSV file and save it as 'variants'
 
-variants <- read.csv("../r_data/combined_tidy_vcf.csv")
+variants <- readr::read_csv("https://ndownloader.figshare.com/files/14632895")
 ```
 
 
 ```{r, echo = FALSE, eval = TRUE, purl = FALSE}
 ## silently read in CSV file from FigShare
 
-variants <- read.csv("https://ndownloader.figshare.com/files/14632895")
+variants <- readr::read_csv("https://ndownloader.figshare.com/files/14632895")
 ```
 
 One of the first things you should notice is that in the Environment window,
@@ -200,8 +225,9 @@ str(variants)
 
 Ok, thats a lot up unpack! Some things to notice.
 
-- the object type `data.frame` is displayed in the first row along with its
-  dimensions, in this case 801 observations (rows) and 29 variables (columns)
+- the object type `tibble` is displayed in the first row along with its
+  dimensions, in this case 801 observations (rows) and 29 variables (columns) -
+  a `tibble` is a 'tidy' format of data frame which has slightly nicer printing.
 - Each variable (column) has a name (e.g. `sample_id`). This is followed
   by the object mode (e.g. factor, int, num, etc.). Notice that before each
   variable name there is a `$` - this will be important later.
@@ -215,9 +241,9 @@ categorial and continuous variables usually have different treatments. Sometimes
 you may want to have data treated as a factor, but in other cases, this may be
 undesirable.
 
-Since some of the data in our data frame are factors, lets see how factors work. First, we'll
-extract one of the columns of our data frame to a new object, so that we don't end up
-modifying the `variants` object by mistake.
+Since some of the data in our data frame are factors, lets see how factors work.
+First, we'll extract one of the columns of our data frame to a new object, so
+that we don't end up modifying the `variants` object by mistake.
 
 ```{r, purl = FALSE}
 ## extract the "REF" column to a new object
@@ -244,44 +270,7 @@ str(REF)
 
 For the sake of efficiency, R stores the content of a factor as a vector of
 integers, which an integer is assigned to each of the possible levels. Recall
-levels are assigned in alphabetical order. In this case, the first item in our "REF" object is
-"T", which happens to be the 49th level of our factor, ordered alphabeticaly. The next two
-items are both "G"s, which is the 33rd level of our factor.
-
-## Plotting and ordering factors
-
-One of the most common uses for factors will be when you plot categorical
-values. For example, suppose we want to know how many of our variants had each possible 
-nucleotide (or nucleotide combination) in the reference genome? We could generate a plot:
-
-```{r, purl = FALSE}
-plot(REF)
-```
-
-This isn't a particularly pretty example of a plot. We'll be learning much more about creating nice, publication-quality graphics later in this lesson. 
-
-<!-- For now, let's explore how we can order -->
-<!-- the factors in our plot so that the first four values are "A", "C", "G", "T", with multi-nucleotide -->
-<!-- combinations listed alphabetically after these four. -->
-
-<!-- We can take our existing `REF` factor, and use the `factor()` -->
-<!-- function again. This time we will pass it two new arguments: `levels` will be -->
-<!-- assigned to a vector that has the REF values in the order we want them, -->
-<!-- and we will set the `ordered` argument to TRUE. -->
-
-<!-- ```{r, purl = FALSE} -->
-<!--  # order the 'REF' factor to match our desired set of levels -->
-<!-- REF <-  -->
-<!-- ```         -->
-
-<!-- We can now see the new ordering: -->
-
-<!-- ```{r, purl = FALSE} -->
-
-<!-- ``` -->
-
-<!-- Although not all levels are shown, notice there are `<` signs indicating an -->
-<!-- order. -->
+levels are assigned in alphabetical order. In this case, the first item in our "REF" object is "T", which happens to be the 49th level of our factor, ordered alphabeticaly. The next two items are both "G"s, which is the 33rd level of our factor.
 
 ## Subsetting data frames
 
@@ -295,7 +284,11 @@ where we are taking a range).
 > ## Exercise: Subsetting a data frame
 >
 > **Try the following indices and functions and try to figure out what they return**
-> 
+<<<<<<< HEAD
+>
+=======
+>
+>>>>>>> update-lesson-03
 > a. `variants[1,1]`
 >
 > b. `variants[2,4]`
@@ -321,65 +314,65 @@ where we are taking a range).
 > l. `variants[variants$REF == "A",]`
 >
 >> ## Solution
->> a. 
+>> a.
 >> ```{r}
 >> variants[1,1]
 >> ```
->> 
->> b. 
+>>
+>> b.
 >> ```{r}
 >> variants[2,4]
 >> ```
->> 
->> c. 
+>>
+>> c.
 >> ```{r}
 >> variants[801,29]
 >> ```
->> 
->> d. 
+>>
+>> d.
 >> ```{r}
 >> variants[2, ]
 >> ```
 >>
->> e. 
+>> e.
 >> ```{r, echo = TRUE, eval = FALSE}
 >> variants[-1, ]
 >> ```
->> 
+>>
 >> ```{r, echo = FALSE, eval = TRUE}
 >> head(variants[-1, ])
 >> ```
 >>
->> f. 
+>> f.
 >> ```{r}
 >> variants[1:4,1]
 >> ```
->> 
->> g. 
+>>
+>> g.
 >> ```{r}
 >> variants[1:10,c("REF","ALT")]
 >> ```
->> 
->> h. 
+>>
+>> h.
 >> ```{r, echo = TRUE, eval = FALSE}
 >> variants[,c("sample_id")]
 >> ```
->> 
+>>
 >> ```{r, echo = FALSE, eval = TRUE}
 >> head(variants[,c("sample_id")])
 >>```
 >>
->> i. 
+>> i.
 >> ```{r}
 >> head(variants)
 >> ```
->> 
->> j. 
+>>
+>> j.
 >> ```{r}
 >> tail(variants)
 >> ```
->> 
->> k. 
+>>
+>> k.
 >> ```{r, echo = TRUE, eval = FALSE}
 >> variants$sample_id
 >> ```
@@ -387,8 +380,8 @@ where we are taking a range).
 >> ```{r, echo = FALSE, eval = TRUE}
 >> head(variants$sample_id)
 >> ```
->> 
->> l. 
+>>
+>> l.
 >> ```{r, echo = TRUE, eval = FALSE}
 >> variants[variants$REF == "A",]
 >> ```
@@ -413,7 +406,7 @@ the screen. You can create a new data frame object by assigning
 them to a new object name:
 
 ```{r, purl = FALSE}
-# create a new data frame containing only observations from SRR2584863 
+# create a new data frame containing only observations from SRR2584863
 
 SRR2584863_variants <- variants[variants$sample_id == "SRR2584863",]
 
@@ -514,7 +507,7 @@ like this one:
 
 ```{r, purl = FALSE}
 # make the 'REF' column a character type column
- 
+
 variants$REF <- as.character(variants$REF)
 
 # check the type of the column
@@ -535,13 +528,15 @@ Lets summarize this section on coercion with a few take home messages.
 - Check the structure (`str()`) of your data frames before working with them!
 
 Regarding the first bullet point, one way to avoid needless coercion when
-importing a data frame using any one of the `read.table()` functions such as
-`read.csv()` is to set the argument `StringsAsFactors` to FALSE. By default,
-this argument is TRUE. Setting it to FALSE will treat any non-numeric column to
-a character type. `read.csv()` documentation, you will also see you can
-explicitly type your columns using the `colClasses` argument. Other R packages
-(such as the Tidyverse "readr") don't have this particular conversion issue,
-but many packages will still try to guess a  data type.
+importing a data frame is to use functions which  won't attempt to convert your
+data types, such as the `read_csv()` function, or others from the `readr` package we used earlier.
+This is preferrable to using any one of the `read.table()` functions such as
+`read.csv()` which by default have the argument `StringsAsFactors` set to TRUE.
+
+If you do use the `read.table()` functions from Base R, always ensure you set
+the argument `StringsAsFactors` to FALSE. Setting it to FALSE will treat any
+non-numeric column to a character type. In the `read.csv()` documentation, you
+will also see you can explicitly type your columns using the `colClasses` argument.
 
 ## Data frame bonus material: math, sorting, renaming
 
@@ -573,7 +568,7 @@ head(sorted_by_DP$DP)
 > The `order()` function lists values in increasing order by default. Look at the documentation
 > for this function and change `sorted_by_DP` to start with variants with the greatest filtered
 > depth ("DP").
-> 
+>
 > > ## Solution
 > > ```{r, purl = FALSE}
 > > sorted_by_DP <- variants[order(variants$DP, decreasing = TRUE), ]
@@ -582,10 +577,6 @@ head(sorted_by_DP$DP)
 > {: .solution}
 {: .challenge}
 
-<!-- You can selectively replace values in a data frame based on their value: -->
-
-<!-- ```{r} -->
-<!-- ``` -->
 
 You can rename columns:
 
@@ -609,91 +600,3 @@ The `write.csv()` function has some additional arguments listed in the help, but
 at a minimum you need to tell it what data frame to write to file, and give a
 path to a file name in quotes (if you only provide a file name, the file will
 be written in the current working directory).
-
-## Importing data from Excel
-
-Excel is one of the most common formats, so we need to discuss how to make
-these files play nicely with R. The simplest way to import data from Excel is
-to **save your Excel file in .csv format***. You can then import into R right
-away. Sometimes you may not be able to do this (imagine you have data in 300
-Excel files, are you going to open and export all of them?).
-
-One common R package (a set of code with features you can download and add to
-your R installation) is the [readxl package](https://CRAN.R-project.org/package=readxl) which can open and import Excel
-files. Rather than addressing package installation this second (we'll discuss this soon!), we can take
-advantage of RStudio's import feature which integrates this package. (Note:
-this feature is available only in the latest versions of RStudio such as is
-installed on our cloud instance).
-
-First, in the RStudio menu go to **File**, select **Import Dataset**, and
-choose **From Excel...** (notice there are several other options you can
-explore).
-
-<img src="../fig/rstudio_import_menu.png " alt="rstudio import menu" style="width: 600px;"/>
-
-Next, under **File/Url:** click the <KBD>Browse</KBD> button and navigate to the **Ecoli_metadata.xlsx** file located at `/home/dcuser/dc_sample_data/R`.
-You should now see a preview of the data to be imported:
-
-<img src="../fig/rstudio_import_screen.png " alt="rstudio import screen" style="width: 1200px;"/>
-
-Notice that you have the option to change the data type of each variable by
-clicking arrow (drop-down menu) next to each column title. Under **Import
-Options** you may also rename the data, choose a different sheet to import, and
-choose how you will handle headers and skipped rows. Under **Code Preview** you
-can see the code that will be used to import this file. We could have written
-this code and imported the Excel file without the RStudio import function, but
-now you can choose your preference.
-
-In this exercise, we will leave the title of the data frame as
-**Ecoli_metadata**, and there are no other options we need to adjust. Click the
-<KBD>Import</KBD> button to import the data.
-
-Finally, let's check the first few lines of the `Ecoli_metadata` data
-frame:
-
-```{r, echo = FALSE, purl = FALSE}
-## read the file so the rest of the episode works, but don't show the code
-Ecoli_metadata <-  readxl::read_xlsx("../data/Ecoli_metadata.xlsx")
-```
-
-```{r, purl = FALSE}
-head(Ecoli_metadata)
-```
-
-The type of this object is 'tibble', a type of data
-frame we will talk more about in the 'dplyr' section. If you needed
-a true R data frame you could coerce with `as.data.frame()`.
-
-> ## Exercise: Putting it all together - data frames
->
-> **Using the `Ecoli_metadata` data frame created above, answer the following questions**
->
-> A) What are the dimensions (# rows, # columns) of the data frame?
->
-> B) What are categories are there in the `cit` column? *hint*: treat column as factor
->
-> C) How many of each of the `cit` categories are there?
->
-> D) What is the genome size for the 7th observation in this data set?
->
-> E) What is the median value of the variable `genome_size`
->
-> F) Rename the column `sample` to `sample_id`
->
-> G) Create a new column (name genome_size_bp) and set it equal to the genome_size multiplied by 1,000,000
->
-> H) Save the edited Ecoli_metadata data frame as "exercise_solution.csv" in your current working directory.
->
->> ## Solution
->> ```{r, purl = FALSE}
->> dim(Ecoli_metadata)
->> levels(as.factor(Ecoli_metadata$cit))
->> table(as.factor(Ecoli_metadata$cit))
->> Ecoli_metadata[7,7]
->> median(Ecoli_metadata$genome_size)
->> colnames(Ecoli_metadata)[colnames(Ecoli_metadata) == "sample"] <- "sample_id"
->> Ecoli_metadata$genome_size_bp <- Ecoli_metadata$genome_size * 1000000
->> write.csv(Ecoli_metadata, file = "exercise_solution.csv")
->> ```
-> {: .solution}
-{: .challenge}
