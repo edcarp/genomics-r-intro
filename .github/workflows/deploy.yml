@@ -11,7 +11,7 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GH_PAT }}
       RSPM: 'https://packagemanager.rstudio.com/cran/__linux__/bionic/latest'
-
+      
     steps:
 
       - name: Checkout repo
@@ -58,7 +58,8 @@ jobs:
 
       - name: Deploy site
         uses: maxheld83/ghpages@v0.3.0
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'datacarpentry/genomics-r-intro' }}
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'edcarp/genomics-r-intro' }}
         env:
           BUILD_DIR: _rendered/
-          GH_PAT: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
