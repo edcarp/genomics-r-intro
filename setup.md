@@ -5,7 +5,7 @@ root: .
 ---
 This lesson assumes you have access to the UoE's Noteable service. Please verify this by logging in at:
 
-https://noteable.edina.ac.uk/login
+[https://noteable.edina.ac.uk/login](https://noteable.edina.ac.uk/login)
 
 If you can not log in (or even if you can, to be safe) ensure you have current versions of the following installed on your computer:
 
