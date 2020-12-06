@@ -237,8 +237,7 @@ filter(variants, sample_id == "SRR2584863")
 ```
 
 ```{r, echo = FALSE, eval = TRUE, purl = FALSE}
-filter(variants, sample_id == "SRR2584863") %>%
-  head()
+filter(variants, sample_id == "SRR2584863")
 ```
 
 Note that this is equivalent to the base R code below, but is easier to read!
@@ -246,6 +245,10 @@ Note that this is equivalent to the base R code below, but is easier to read!
 ```{r, eval = FALSE, purl = FALSE}
 variants[variants$sample_id == "SRR2584863",]
 ```
+
+<!-- Add exercise about filtering out NA values either in filter() section, or -->
+<!-- in pipe or mutate() section, with `filter(!is.na())` base-r-ish version or -->
+<!-- tidyr::drop_na() which I think is more recent and 'tidyverse' canon version -->
 
 ### Pipes
 
@@ -264,27 +267,26 @@ or <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> if you're using a Mac.
 ```{r, echo = TRUE, eval = TRUE, purl = FALSE}
 variants %>%
   filter(sample_id == "SRR2584863") %>%
-  select(REF, ALT, DP) %>%
-  glimpse()
+  select(REF, ALT, DP)
 ```
 
 In the above code, we use the pipe to send the `variants` dataset first through
-`filter()`, to keep rows where `sample_id` matches a particular sample, and then through `select()` to
-keep only the `REF`, `ALT`, and `DP` columns. Since `%>%` takes
-the object on its left and passes it as the first argument to the function on
-its right, we don't need to explicitly include the data frame as an argument
-to the `filter()` and `select()` functions any more. We then pipe the results
-to the `head()` function so that we only see the first six rows of data.
+`filter()`, to keep rows where `sample_id` matches a particular sample, and then
+through `select()` to keep only the `REF`, `ALT`, and `DP` columns. Since `%>%` 
+takes the object on its left and passes it as the first argument to the function 
+on its right, we don't need to explicitly include the data frame as an argument
+to the `filter()` and `select()` functions any more. 
 
 Some may find it helpful to read the pipe like the word "then". For instance,
 in the above example, we took the data frame `variants`, *then* we `filter`ed
 for rows where `sample_id` was SRR2584863, *then* we `select`ed the `REF`, `ALT`, 
 and `DP` columns, *then* we showed only the first six rows. 
 
-
 The **`dplyr`** functions by themselves are somewhat simple,
 but by combining them into linear workflows with the pipe, we can accomplish
 more complex manipulations of data frames.
+
+NOTE: Pipes work with non-`dplyr` functions, too, as long as the `dplyr` or `magrittr` package is loaded.
 
 If we want to create a new object with this smaller version of the data we
 can do so by assigning it a new name:
@@ -334,8 +336,8 @@ to a probability value according to the formula:
 Probability = 1- 10 ^ -(QUAL/10)
 
 Let's add a column (`POLPROB`) to our `variants` dataframe that shows 
-the probability of a polymorphism at that site given the data. We'll show 
-only the first six rows of data.
+the probability of a polymorphism at that site given the data. 
+
 
 ```{r, purl = FALSE}
 variants %>%
@@ -343,17 +345,23 @@ variants %>%
   glimpse()
 ```
 
+NOTE: We've used the `glimpse()` function to show only the first few 
+values of data for each variable - we'll see it's quite similar to 
+`str()` in how it shows the output.  You could also use `head()` in the same way 
+to just show 6 rows rather than the 10 rows shown by default with tibbles.
+
 > ## Exercise
 > There are a lot of columns in our dataset, so let's just look at the
 > `sample_id`, `POS`, `QUAL`, and `POLPROB` columns for now. Add a 
-> line to the above code to only show those columns. 
+> line to the above code to only show those columns and show the output via `glimpse()`.
 > 
 >> ## Solution
 >> ```{r}
 >> variants %>%
->>  mutate(POLPROB = 1 - 10 ^ -(QUAL/10)) %>%
->>  glimpse %>%
->>  select(sample_id, POS, QUAL, POLPROB)
+>> mutate(POLPROB = 1 - 10 ^ -(QUAL/10)) %>%
+>> select(sample_id, POS, QUAL, POLPROB) %>%
+>> glimpse()
+
 >> ```
 > {: .solution}
 {: .challenge}
