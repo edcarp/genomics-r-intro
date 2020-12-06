@@ -411,6 +411,8 @@ str(variants)</code></pre>
 <pre><code>## preview the data
 view(variants)</code></pre>
 <p>{: .language-r}</p>
+<!-- COLUMN NAME INFO FOR VARIANTS DATA: "Explore the VCF format" section: -->
+<!-- https://datacarpentry.org/wrangling-genomics/04-variant_calling/index.html -->
 <p>Next, we’re going to learn some of the most common <strong><code>dplyr</code></strong> functions as well as using pipes to combine them:</p>
 <ul>
 <li><code>select()</code>: subset columns</li>
@@ -718,7 +720,10 @@ $ POLPROB   &lt;dbl&gt; 1.0000000, 1.0000000, 1.0000000, 0.9999996, 1.0000000, 1
 2 SRR2584866        79
 3 SRR2589044        16</code></pre>
 <p>{: .output}</p>
-<p>TODO: summarize() more than one variable (e.g. get min, mean sampling depth per sample) TODO: <code>dplyr::count()</code> as alternative to <code>n()</code> TODO: <code>dplyr::arrange()</code></p>
+<!-- TODO: summarize() more than one variable (e.g. get min, mean sampling depth per sample) -->
+<!-- TODO: summarize() more than one variable (e.g. get min, mean sampling depth per sample) -->
+<!-- TODO: `dplyr::count()` as alternative to `n()` -->
+<!-- TODO: `dplyr::arrange()` -->
 </div>
 </div>
 <div id="handling-missing-values-in-data" class="section level3">
@@ -726,12 +731,11 @@ $ POLPROB   &lt;dbl&gt; 1.0000000, 1.0000000, 1.0000000, 0.9999996, 1.0000000, 1
 <p>By default, all <strong>R functions operating on vectors that contains missing data will return NA</strong>.</p>
 <p>It’s a way to make sure that users know they have missing data, and make a conscious decision on how to deal with it. When dealing with simple statistics like the mean, the easiest way to ignore <code>NA</code> (the missing data) is to use <code>na.rm = TRUE</code> (<code>rm</code> stands for remove).</p>
 <p>When working with data frames (and tibbles!), we have slightly more options.</p>
+<!-- TODO: add information about those options! -->
 <!-- Add exercise about filtering out NA values either in filter() section, or -->
 <!-- in pipe or mutate() section, with `filter(!is.na())` base-r-ish version or -->
 <!-- tidyr::drop_na() which I think is more recent and 'tidyverse' canon version -->
-</div>
-<div id="reshaping-with-gather-and-spread" class="section level3">
-<h3>Reshaping with gather and spread</h3>
+<!-- ### Reshaping with gather and spread -->
 <!-- TODO: Reshaping with gather and spread -->
 <!-- You can group by multiple columns too. For example, we might want to  -->
 <!-- know if ...  -->
