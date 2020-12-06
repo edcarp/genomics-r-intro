@@ -246,10 +246,6 @@ Note that this is equivalent to the base R code below, but is easier to read!
 variants[variants$sample_id == "SRR2584863",]
 ```
 
-<!-- Add exercise about filtering out NA values either in filter() section, or -->
-<!-- in pipe or mutate() section, with `filter(!is.na())` base-r-ish version or -->
-<!-- tidyr::drop_na() which I think is more recent and 'tidyverse' canon version -->
-
 ### Pipes
 
 But what if you wanted to select *and* filter? We can do this with pipes. 
@@ -346,9 +342,11 @@ variants %>%
 ```
 
 NOTE: We've used the `glimpse()` function to show only the first few 
-values of data for each variable - we'll see it's quite similar to 
+values of data for each variable - you can see it's quite similar to 
 `str()` in how it shows the output.  You could also use `head()` in the same way 
 to just show 6 rows rather than the 10 rows shown by default with tibbles.
+
+<!-- also mention print() ? -->
 
 > ## Exercise
 > There are a lot of columns in our dataset, so let's just look at the
@@ -368,34 +366,35 @@ to just show 6 rows rather than the 10 rows shown by default with tibbles.
 
 ### Split-apply-combine data analysis and the summarize() function
 
-Many data analysis tasks can be approached using the "split-apply-combine"
+Many data analysis tasks can be approached using the *"split-apply-combine"*
 paradigm: split the data into groups, apply some analysis to each group, and
 then combine the results. `dplyr` makes this very easy through the use of the
-`group_by()` function, which splits the data into groups. When the data is
-grouped in this way `summarize()` can be used to collapse each group into
-a single-row summary. `summarize()` does this by applying an aggregating
-or summary function to each group. For example, if we wanted to group
-by sample_id and find the number of rows of data for each 
-sample, we would do:
+`group_by()` function, which splits the data into groups. 
+
+#### The `summarize()` function
+
+`group_by()` is often used together with `summarize()`, which collapses each
+group into a single-row summary of that group.  `group_by()` takes as arguments
+the column names that contain the **categorical** variables for which you want
+to calculate the summary statistics. 
+
+For example, if we wanted to group by `sample_id` and find the number of rows 
+of data for each sample, we would do:
 
 ```{r, purl = FALSE}
 variants %>%
   group_by(sample_id) %>%
-  summarize(n())
+  summarize(n_observations = n())
 ```
 
 Here the summary function used was `n()` to find the count for each
-group. We can also apply many other functions  to individual columns
-to get other summary statistics. For example,
-we can use built-in functions like
-`mean()`, `median()`, `min()`, and `max()`. These are called 
-"built-in functions" because they come with R and don't require that you install any additional packages. By default, all **R functions
-operating on vectors that contains missing data will return NA**.
-It's a way to make sure that users know they have missing
-data, and make a conscious decision on how to deal with it. When
-dealing with simple statistics like the mean, the easiest way to
-ignore `NA` (the missing data) is to use `na.rm = TRUE` (`rm` stands for
-remove). 
+group, which we displayed in a column which we called `n_observations`. 
+
+We can also apply many other functions  to individual columns
+to get other summary statistics. For example, we can use built-in functions like
+`mean()`, `median()`, `min()`, and `max()`. These are called "built-in 
+functions" because they come with R and don't require that you install any 
+additional packages. 
 
 So to view the highest filtered depth (`DP`) for each sample:
 
@@ -404,6 +403,33 @@ variants %>%
   group_by(sample_id) %>%
   summarize(max(DP))
 ```
+
+TODO: summarize() more than one variable (e.g. get min, mean sampling depth per sample)
+TODO: `dplyr::count()` as alternative to `n()`
+TODO: `dplyr::arrange()`
+
+### Handling Missing Values In Data
+
+By default, all **R functions operating on vectors that contains missing data 
+will return NA**.
+
+It's a way to make sure that users know they have missing
+data, and make a conscious decision on how to deal with it. When
+dealing with simple statistics like the mean, the easiest way to
+ignore `NA` (the missing data) is to use `na.rm = TRUE` (`rm` stands for
+remove). 
+
+When working with data frames (and tibbles!), we have slightly more options. 
+
+<!-- Add exercise about filtering out NA values either in filter() section, or -->
+<!-- in pipe or mutate() section, with `filter(!is.na())` base-r-ish version or -->
+<!-- tidyr::drop_na() which I think is more recent and 'tidyverse' canon version -->
+
+### Reshaping with gather and spread
+
+<!-- TODO: Reshaping with gather and spread -->
+
+
 
 <!-- You can group by multiple columns too. For example, we might want to  -->
 <!-- know if ...  -->
@@ -418,6 +444,49 @@ variants %>%
 <!-- ```{r, purl = FALSE} -->
 
 <!-- ``` -->
+
+## Exporting data
+
+Now that you have learned how to use **`dplyr`** to extract information from
+or summarize your raw data, you may want to export these new data sets to share
+them with your collaborators or for archival.
+
+Similar to the `read.csv()` function used for reading CSV files into R, there is
+a `write.csv()` function that generates CSV files from data frames.
+
+Before using `write.csv()`, we should preferrably create a new folder, `data`,
+in our working directory that will store this generated dataset. We don't want
+to write generated datasets in the same directory as our raw data. It's good
+practice to keep them separate.
+
+Ideally, we should have a `data_raw` folder should only contain the raw, unaltered data, and should be left alone to make sure we don't delete or modify it. In contrast, 
+our script will generate the contents of the `data` directory, so even if the 
+files it contains are deleted, we can always re-generate them.
+
+In preparation for our next lesson on plotting, we are going to prepare a
+cleaned up version of the data set that doesn't include any missing data.
+
+<!-- TODO: export the dataset - make cleaned up version of dataset -->
+<!-- * remove missing data -->
+<!-- * filter to particular quality of data (over sequencing depth threshold?) -->
+<!-- * KEEP IN MIND WHY? WHAT WILL WE PLOT WITH THIS LATER??? -->
+<!-- * check dim() to ensure everyone's got same dataset -->
+<!-- * change `eval=FALSE` to eval=TRUE for 1st and 3rd of these code blocks -->
+<!-- * remove `echo=FALSE from first two of these code blocks -->
+
+```{r, purl=FALSE, eval=FALSE, echo=FALSE}
+variants_complete <- variants # %>%
+  #filter()
+```
+
+```{r, purl=FALSE, eval=FALSE, echo=FALSE}
+write_csv(variants_complete, file = "data/variants_complete.csv")
+```
+
+```{r, purl=FALSE, eval=FALSE, echo=FALSE}
+if (!dir.exists("data")) dir.create("data")
+write_csv(variants_complete, file = "data/variants_complete.csv")
+```
 
 [Handy dplyr cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf)
 
