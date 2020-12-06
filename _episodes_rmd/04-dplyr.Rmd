@@ -31,7 +31,11 @@ knitr_fig_path("04-")
 variants <- read.csv("https://ndownloader.figshare.com/files/14632895")
 ```
 
-Bracket subsetting is handy, but it can be cumbersome and difficult to read, especially for complicated operations. 
+
+### Data Manipulation using **`dplyr`** and the **`tidyverse`**
+
+Bracket subsetting is handy, but it can be cumbersome and difficult to read, 
+especially for complicated operations. 
 
 Luckily, the [`dplyr`](https://cran.r-project.org/package=dplyr)
 package provides a number of very useful functions for manipulating dataframes
@@ -39,39 +43,73 @@ in a way that will reduce repetition, reduce the probability of making
 errors, and probably even save you some typing. As an added bonus, you might
 even find the `dplyr` grammar easier to read.
 
-Here we're going to cover 6 of the most commonly used functions as well as using
-pipes (`%>%`) to combine them.
+So how do we access `dplyr`? 
 
-1. `select()`
-2. `filter()`
-3. `group_by()`
-4. `summarize()`
-5. `mutate()`
+It's available as a package on its own, but also comes as part of another 
+package called `tidyverse`.
 
-Packages in R are sets of additional functions that let you do more
-stuff in R. The functions we've been using, like `str()`, come built into R;
-packages give you access to more functions. You need to install a package and
-then load it to be able to use it.
+As a reminder, packages in R are basically sets of additional functions that let
+you do more stuff. The functions we've been using so far, like `str()`,
+come built into R; packages give you access to more of them. Before you use a
+package for the first time you need to install it on your machine, and then you
+should import it in every subsequent R session when you need it. 
+
+#### `Tidyverse` packages
+
+For the purposes of this workshop, we are going to install `tidyverse`. This is an
+"umbrella-package" that installs several packages useful for data analysis which
+work together well such as **`readr`**, **`tidyr`**, **`dplyr`**, **`ggplot2`**, **`tibble`**, etc.
+
+The **`tidyverse`** package tries to address 3 common issues that arise when
+doing data analysis with some of the functions that come with R:
+
+1. The results from a base R function sometimes depend on the type of data.
+2. Using R expressions in a non standard way, which can be confusing for new
+   learners.
+3. Hidden arguments, having default operations that new learners are not aware
+   of.
+
+First we have to make sure we have the `tidyverse` package installed. 
+
+#### Install `tidyverse`
+
+ON NOTABLE: 
+
+If you're using the EDINA Notable RStudio Server, `tidyverse` is already installed,
+so you can skip this step. It's worth knowing how to install a package for future 
+though, so here's how:
+
+ON LOCAL RSTUDIO: 
+
+Install the package you want by using the `install.package()` function, with the 
+name of the package you want inside the brackets, within quotes. 
+If you get an error, make sure you've spelt the package name correctly.
 
 ```{r, eval = FALSE, purl = FALSE}
-install.packages("dplyr") ## install
+install.packages("tidyverse") ## install tidyverse
 ```
 
 You might get asked to choose a CRAN mirror -- this is asking you to
 choose a site to download the package from. The choice doesn't matter too much; I'd recommend choosing the RStudio mirror.
 
+#### Load `tidyverse` package
+
+To load the package (whether in Notable or running RStudio locally), type (without quotes this time!):
+
 ```{r, message = FALSE, purl = FALSE}
-library("dplyr")          ## load
+## load the tidyverse packages, incl. dplyr
+library(tidyverse)
 ```
 
 You only need to install a package once per computer, but you need to load it
 every time you open a new R session and want to use that package.
 
-## What is dplyr?
+#### What is dplyr?
 
-The package `dplyr` is a fairly new (2014) package that tries to provide easy
-tools for the most common data manipulation tasks. It is built to work directly
-with data frames. The thinking behind it was largely inspired by the package
+The package `dplyr` is a package that tries to provide easy tools for the most 
+common data manipulation tasks. It is built to work directly with data frames. 
+
+The thinking behind it was largely inspired by the package
 `plyr` which has been in use for some time but suffered from being slow in some
 cases.` dplyr` addresses this by porting much of the computation to C++. An
 additional feature is the ability to work with data stored directly in an
@@ -85,19 +123,53 @@ memory. The database connections essentially remove that limitation in that you
 can have a database of many 100s GB, conduct queries on it directly and pull
 back just what you need for analysis in R.
 
+Here we're going to cover 6 of the most commonly used functions as well as using
+pipes (`%>%`) to combine them.
+
+1. `select()`
+2. `filter()`
+3. `group_by()`
+4. `summarize()`
+5. `mutate()`
+
 ### Selecting columns and filtering rows
 
-To select columns of a
-data frame, use `select()`. The first argument to this function is the data
-frame (`variants`), and the subsequent arguments are the columns to keep.
+Using bracket notation, in order to pull out certain columns, we would have to 
+know which index referred to that column, which took an extra step, and if we 
+had re-ordered our columns or added one in the middle, the indexes in our script
+would suddenly refer to the 'wrong' column, which might cause confusion!
+
+As a refresher, here's how we pulled out columns using the bracket notation: 
+```{r, echo = TRUE, eval = FALSE, purl = FALSE}
+# get columns: sample_id, REF, ALT, DP
+variants[, c(1, 5, 6, 12)]
+```
+
+```{r, echo = FALSE, eval = TRUE, purl = FALSE}
+head(variants[, c(1, 5, 6, 12)])
+```
+
+But our code isn't very easy to understand and we'd need to see the output to make 
+sure we had the correct columns.
+
+Enter `dplyr`!
+
+#### `select()` columns
+
+To select columns of a data frame, use `select()`. The first argument to this 
+function is the data frame (`variants`), and the subsequent arguments are the 
+columns to keep.
 
 ```{r, echo = TRUE, eval = FALSE, purl = FALSE}
 select(variants, sample_id, REF, ALT, DP)
 ```
+
 ```{r, echo = FALSE, eval = TRUE, purl = FALSE}
 select(variants, sample_id, REF, ALT, DP) %>%
   head()
 ```
+
+This code is much easier to understand!
 
 To select all columns *except* certain ones, put a "-" in front of
 the variable to exclude it.
@@ -111,6 +183,38 @@ select(variants, -CHROM) %>%
   head()
 ```
 
+#### Tibbles and `as_tibble()`
+
+One thing we still have is an issue with how our output prints - it takes up a 
+lot of space in our console, and it's a little confusing to read. We might get 
+a warning like `[ reached 'max' / getOption("max.print") -- omitted 551 rows ]`
+if we're showing too many rows. We might usually just want to view the first few 
+rows to check our output makes sense, not the first few hundred!
+
+Luckily, the `tidyverse` has another package to help us: `tibble`.
+
+Using the function `as_tibble()` will convert our `data.frame` object into the 
+slightly friendlier `"tibble"` format, which is officially known as a `tbl_df`. 
+
+Tibbles have better formatting and printing and stricter handling of data types, 
+and are the 'central data structure' for the `tidyverse` set of packages. 
+They also help make our data manipulation much easier!
+
+We use our variants data frame as the argument 
+```{r, echo = TRUE, eval = FALSE, purl = FALSE}
+variants <- as_tibble(variants)
+select(variants, sample_id, REF, ALT, DP)
+```
+
+```{r, echo = FALSE, eval = TRUE, purl = FALSE}
+variants <- as_tibble(variants)
+select(variants, sample_id, REF, ALT, DP)
+```
+
+This looks much better!
+
+#### `filter()` rows
+
 To choose rows, use `filter()`:
 
 ```{r, echo = TRUE, eval = FALSE, purl = FALSE}
@@ -122,8 +226,7 @@ filter(variants, sample_id == "SRR2584863") %>%
   head()
 ```
 
-Note that this is equivalent to the base R code below, 
-but is easier to read!
+Note that this is equivalent to the base R code below, but is easier to read!
 
 ```{r, eval = FALSE, purl = FALSE}
 variants[variants$sample_id == "SRR2584863",]
@@ -131,14 +234,16 @@ variants[variants$sample_id == "SRR2584863",]
 
 ### Pipes
 
-But what if you wanted to select and filter? We can do this with pipes. Pipes, are a fairly recent addition to R. Pipes let you
-take the output of one function and send it directly to the next, which is
-useful when you need to many things to the same data set. It was
+But what if you wanted to select *and* filter? We can do this with pipes. 
+
+Pipes let you take the output of one function and send it directly to the next, 
+which is useful when you need to many things to the same data set. It was
 possible to do this before pipes were added to R, but it was 
-much messier and more difficult. Pipes in R look like
-`%>%` and are made available via the `magrittr` package, which is installed as
-part of `dplyr`. If you use RStudio, you can type the pipe with
-<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> if you're using a PC,
+much messier and more difficult. 
+
+Pipes in R look like `%>%` and are made available via the `magrittr` package, 
+which is installed as part of `dplyr`. If you use RStudio, you can type the pipe 
+with <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> if you're using a PC,
 or <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> if you're using a Mac.
 
 ```{r, echo = TRUE, eval = TRUE, purl = FALSE}
@@ -158,7 +263,10 @@ to the `head()` function so that we only see the first six rows of data.
 
 Some may find it helpful to read the pipe like the word "then". For instance,
 in the above example, we took the data frame `variants`, *then* we `filter`ed
-for rows where `sample_id` was SRR2584863, *then* we `select`ed the `REF`, `ALT`, and `DP` columns, *then* we showed only the first six rows. 
+for rows where `sample_id` was SRR2584863, *then* we `select`ed the `REF`, `ALT`, 
+and `DP` columns, *then* we showed only the first six rows. 
+
+
 The **`dplyr`** functions by themselves are somewhat simple,
 but by combining them into linear workflows with the pipe, we can accomplish
 more complex manipulations of data frames.
