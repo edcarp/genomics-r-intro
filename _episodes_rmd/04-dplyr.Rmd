@@ -407,9 +407,10 @@ variants %>%
   summarize(max(DP))
 ```
 
-TODO: summarize() more than one variable (e.g. get min, mean sampling depth per sample)
-TODO: `dplyr::count()` as alternative to `n()`
-TODO: `dplyr::arrange()`
+<!-- TODO: summarize() more than one variable (e.g. get min, mean sampling depth per sample) -->
+<!-- TODO: summarize() more than one variable (e.g. get min, mean sampling depth per sample) -->
+<!-- TODO: `dplyr::count()` as alternative to `n()` -->
+<!-- TODO: `dplyr::arrange()` -->
 
 ### Handling Missing Values In Data
 
@@ -424,12 +425,13 @@ remove).
 
 When working with data frames (and tibbles!), we have slightly more options. 
 
+<!-- TODO: add information about those options! -->
+
 <!-- Add exercise about filtering out NA values either in filter() section, or -->
 <!-- in pipe or mutate() section, with `filter(!is.na())` base-r-ish version or -->
 <!-- tidyr::drop_na() which I think is more recent and 'tidyverse' canon version -->
 
-### Reshaping with gather and spread
-
+<!-- ### Reshaping with gather and spread -->
 <!-- TODO: Reshaping with gather and spread -->
 
 
