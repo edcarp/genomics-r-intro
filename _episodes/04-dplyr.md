@@ -142,6 +142,9 @@ view(variants)
 ~~~
 {: .language-r}
 
+<!-- COLUMN NAME INFO FOR VARIANTS DATA: "Explore the VCF format" section: --> 
+<!-- https://datacarpentry.org/wrangling-genomics/04-variant_calling/index.html -->
+
 Next, we're going to learn some of the most common **`dplyr`** functions as well 
 as using pipes to combine them:
 
