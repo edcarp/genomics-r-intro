@@ -1,15 +1,21 @@
 ---
 title: "Aggregating and Analyzing Data with dplyr"
-teaching: 40
+teaching: 60
 exercises: 15
 questions:
 - "How can I manipulate dataframes without repeating myself?"
 objectives:
-- "Describe what the `dplyr` package in R is used for."
-- "Apply common `dplyr` functions to manipulate data in R."
-- "Employ the ‘pipe’ operator to link together a sequence of functions."
-- "Employ the ‘mutate’ function to apply other chosen functions to existing columns and create new columns of data."
+- "Select certain columns in a data frame with the **`dplyr`** function `select`."
+- "Extract certain rows in a data frame according to logical (boolean) conditions with the **`dplyr`** function `filter`."
+- "Link the output of one **`dplyr`** function to the input of another function with the 'pipe' operator `%>%`."
+- "Add new columns to a data frame that are functions of existing columns with `mutate`."
+- "Use the split-apply-combine concept for data analysis."
+- "Use `summarize`, `group_by`, and `count` to split a data frame into groups of observations, apply summary statistics for each group, and then combine the results."
 - "Employ the ‘split-apply-combine’ concept to split the data into groups, apply analysis to each group, and combine the results."
+- "Describe the concept of a wide and a long table format and for which purpose those formats are useful."
+- "Describe what key-value pairs are."
+- "Reshape a data frame from long to wide format and back with the `spread` and `gather` commands from the **`tidyr`** package."
+- "Export a data frame to a .csv file."
 
 keypoints:
 - "Use the `dplyr` package to manipulate dataframes."
@@ -32,33 +38,13 @@ variants <- read.csv("https://ndownloader.figshare.com/files/14632895")
 ```
 
 
-### Data Manipulation using **`dplyr`** and the **`tidyverse`**
+# Data manipulation using **`dplyr`** and **`tidyr`** from **`tidyverse`** package
 
-Bracket subsetting is handy, but it can be cumbersome and difficult to read, 
-especially for complicated operations. 
+Bracket subsetting is handy, but it can be cumbersome and difficult to read,
+especially for complicated operations. Enter **`dplyr`**. **`dplyr`** is a package for
+making tabular data manipulation easier. It pairs nicely with **`tidyr`** which enables you to swiftly convert between different data formats for plotting and analysis.
 
-Luckily, the [`dplyr`](https://cran.r-project.org/package=dplyr)
-package provides a number of very useful functions for manipulating dataframes
-in a way that will reduce repetition, reduce the probability of making
-errors, and probably even save you some typing. As an added bonus, you might
-even find the `dplyr` grammar easier to read.
-
-So how do we access `dplyr`? 
-
-It's available as a package on its own, but also comes as part of another 
-package called `tidyverse`.
-
-As a reminder, packages in R are basically sets of additional functions that let
-you do more stuff. The functions we've been using so far, like `str()`,
-come built into R; packages give you access to more of them. Before you use a
-package for the first time you need to install it on your machine, and then you
-should import it in every subsequent R session when you need it. 
-
-#### `Tidyverse` packages
-
-For the purposes of this workshop, we are going to install `tidyverse`. This is an
-"umbrella-package" that installs several packages useful for data analysis which
-work together well such as **`readr`**, **`tidyr`**, **`dplyr`**, **`ggplot2`**, **`tibble`**, etc.
+The **`tidyverse`** package is an "umbrella-package" that installs **`tidyr`**, **`dplyr`**, and several other packages useful for data analysis, such as  **`ggplot2`**, **`tibble`**, etc.
 
 The **`tidyverse`** package tries to address 3 common issues that arise when
 doing data analysis with some of the functions that come with R:
@@ -69,21 +55,22 @@ doing data analysis with some of the functions that come with R:
 3. Hidden arguments, having default operations that new learners are not aware
    of.
 
-First we have to make sure we have the `tidyverse` package installed. 
+First we have to make sure we have the `tidyverse` package (including `dplyr` 
+and `tidyr`) installed. 
 
 #### Install `tidyverse`
 
-ON NOTABLE: 
+**ON NOTABLE RSTUDIO SERVER:**
 
 If you're using the EDINA Notable RStudio Server, `tidyverse` is already installed,
 so you can skip this step. It's worth knowing how to install a package for future 
-though, so here's how:
+though, so check out the instructions for locally-installed RStudio.
 
-ON LOCAL RSTUDIO: 
+**ON LOCAL RSTUDIO:**
 
 Install the package you want by using the `install.package()` function, with the 
 name of the package you want inside the brackets, within quotes. 
-If you get an error, make sure you've spelt the package name correctly.
+If you get an error, make sure you've spelled the package name correctly.
 
 ```{r, eval = FALSE, purl = FALSE}
 install.packages("tidyverse") ## install tidyverse
@@ -104,33 +91,61 @@ library(tidyverse)
 You only need to install a package once per computer, but you need to load it
 every time you open a new R session and want to use that package.
 
-#### What is dplyr?
+## What are **`dplyr`** and **`tidyr`**?
 
-The package `dplyr` is a package that tries to provide easy tools for the most 
-common data manipulation tasks. It is built to work directly with data frames. 
+The package **`dplyr`** provides easy tools for the most common data manipulation
+tasks. It is built to work directly with data frames, with many common tasks
+optimized by being written in a compiled language (C++). An additional feature is the
+ability to work directly with data stored in an external database. The benefits of
+doing this are that the data can be managed natively in a relational database,
+queries can be conducted on that database, and only the results of the query are
+returned.
 
-The thinking behind it was largely inspired by the package
-`plyr` which has been in use for some time but suffered from being slow in some
-cases.` dplyr` addresses this by porting much of the computation to C++. An
-additional feature is the ability to work with data stored directly in an
-external database. The benefits of doing this are that the data can be managed
-natively in a relational database, queries can be conducted on that database,
-and only the results of the query returned.
-
-This addresses a common problem with R in that all operations are conducted in
-memory and thus the amount of data you can work with is limited by available
+This addresses a common problem with R in that all operations are conducted
+in-memory and thus the amount of data you can work with is limited by available
 memory. The database connections essentially remove that limitation in that you
-can have a database of many 100s GB, conduct queries on it directly and pull
-back just what you need for analysis in R.
+can connect to a database of many hundreds of GB, conduct queries on it directly, and pull
+back into R only what you need for analysis.
 
-Here we're going to cover 6 of the most commonly used functions as well as using
-pipes (`%>%`) to combine them.
+The package **`tidyr`** addresses the common problem of wanting to reshape your data for
+plotting and use by different R functions. Sometimes we want data sets where we have one
+row per measurement. Sometimes we want a data frame where each measurement type has its
+own column, and rows are instead more aggregated groups
+(e.g., a time period, an experimental unit like a plot or a batch number).
+Moving back and forth between these formats is non-trivial, and **`tidyr`** gives you tools
+for this and more sophisticated  data manipulation.
 
-1. `select()`
-2. `filter()`
-3. `group_by()`
-4. `summarize()`
-5. `mutate()`
+To learn more about **`dplyr`** and **`tidyr`** after the workshop, you may want to check out this
+[handy data transformation with **`dplyr`** cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf)
+and this [one about **`tidyr`**](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf).
+
+
+As before, we'll read in our variants data: 
+``````{r, echo = TRUE, eval = FALSE, purl = FALSE}
+variants <- read.csv("https://ndownloader.figshare.com/files/14632895")
+```
+
+We then want to check our variants object: 
+
+```{r, results = 'hide', purl = FALSE}
+## inspect the data
+str(variants)
+```
+
+```{r, eval=FALSE, purl=FALSE}
+## preview the data
+view(variants)
+```
+
+Next, we're going to learn some of the most common **`dplyr`** functions as well 
+as using pipes to combine them:
+
+- `select()`: subset columns
+- `filter()`: subset rows on conditions
+- `mutate()`: create new columns by using information from other columns
+- `group_by()` and `summarize()`: create summary statistics on grouped data
+- `arrange()`: sort results
+- `count()`: count discrete values
 
 ### Selecting columns and filtering rows
 
@@ -154,7 +169,7 @@ sure we had the correct columns.
 
 Enter `dplyr`!
 
-#### `select()` columns
+#### How to **`select()`** columns
 
 To select columns of a data frame, use `select()`. The first argument to this 
 function is the data frame (`variants`), and the subsequent arguments are the 
@@ -183,7 +198,7 @@ select(variants, -CHROM) %>%
   head()
 ```
 
-#### Tibbles and `as_tibble()`
+#### Tibbles and **`as_tibble()`**
 
 One thing we still have is an issue with how our output prints - it takes up a 
 lot of space in our console, and it's a little confusing to read. We might get 
@@ -213,7 +228,7 @@ select(variants, sample_id, REF, ALT, DP)
 
 This looks much better!
 
-#### `filter()` rows
+#### How to **`filter()`** rows
 
 To choose rows, use `filter()`:
 
