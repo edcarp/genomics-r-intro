@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2020-12-06 21:20:29 +0000">
+    <meta http-equiv="last-modified" content="2020-12-08 13:03:48 +0000">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -465,14 +465,39 @@ and this <a href="https://github.com/rstudio/cheatsheets/raw/master/data-import.
 <p>Next, we’re going to learn some of the most common <strong><code class="language-plaintext highlighter-rouge">dplyr</code></strong> functions as well 
 as using pipes to combine them:</p>
 
+<p>If we think about our data as rectangular, these illustrations from the 
+<a href="https://rstudio.com/resources/cheatsheets/"><strong>dplyr data transformation cheatsheet</strong></a> 
+help us understand how they manupulate the data frame.</p>
+
 <ul>
   <li><code class="language-plaintext highlighter-rouge">select()</code>: subset columns</li>
+</ul>
+
+<p><img src="../fig/dplyr_cheatsheet_select.png" alt="rstudio cheatsheet - select" style="width: 100px;" /></p>
+
+<ul>
   <li><code class="language-plaintext highlighter-rouge">filter()</code>: subset rows on conditions</li>
+</ul>
+
+<p><img src="../fig/dplyr_cheatsheet_filter.png" alt="rstudio cheatsheet - filter" style="width: 100px;" /></p>
+
+<ul>
   <li><code class="language-plaintext highlighter-rouge">mutate()</code>: create new columns by using information from other columns</li>
+</ul>
+
+<p><img src="../fig/dplyr_cheatsheet_mutate.png" alt="rstudio cheatsheet - mutate" style="width: 100px;" /></p>
+
+<ul>
   <li><code class="language-plaintext highlighter-rouge">group_by()</code> and <code class="language-plaintext highlighter-rouge">summarize()</code>: create summary statistics on grouped data</li>
-  <li><code class="language-plaintext highlighter-rouge">arrange()</code>: sort results</li>
+</ul>
+
+<p><img src="../fig/dplyr_cheatsheet_group_by.png" alt="rstudio cheatsheet - group_by" style="width: 100px;" /> <img src="../fig/dplyr_cheatsheet_summarize.png" alt="rstudio cheatsheet - summarize" style="width: 100px;" /></p>
+
+<ul>
   <li><code class="language-plaintext highlighter-rouge">count()</code>: count discrete values</li>
 </ul>
+
+<p><img src="../fig/dplyr_cheatsheet_count.png" alt="rstudio cheatsheet - count" style="width: 100px;" /></p>
 
 <h3 id="selecting-columns-and-filtering-rows">Selecting columns and filtering rows</h3>
 
@@ -1095,7 +1120,7 @@ cleaned up version of the data set that doesn’t include any missing data.</p>
     </div>
   </div>
   <p class="text-muted text-right">
-    <small><i>Using <a href="https://github.com/carpentries/carpentries-theme/">The Carpentries theme</a> &mdash; Site last built on: 2020-12-06 21:20:29 +0000.</i></small>
+    <small><i>Using <a href="https://github.com/carpentries/carpentries-theme/">The Carpentries theme</a> &mdash; Site last built on: 2020-12-08 13:03:48 +0000.</i></small>
   </p>
 </footer>
 

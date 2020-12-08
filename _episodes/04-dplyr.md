@@ -145,12 +145,30 @@ view(variants)
 Next, we're going to learn some of the most common **`dplyr`** functions as well 
 as using pipes to combine them:
 
+If we think about our data as rectangular, these illustrations from the 
+[**dplyr data transformation cheatsheet**](https://rstudio.com/resources/cheatsheets/) 
+help us understand how they manupulate the data frame.
+
 - `select()`: subset columns
+
+<img src="../fig/dplyr_cheatsheet_select.png" alt="rstudio cheatsheet - select" style="width: 100px;"/>
+
 - `filter()`: subset rows on conditions
+
+<img src="../fig/dplyr_cheatsheet_filter.png" alt="rstudio cheatsheet - filter" style="width: 100px;"/>
+
 - `mutate()`: create new columns by using information from other columns
+
+<img src="../fig/dplyr_cheatsheet_mutate.png" alt="rstudio cheatsheet - mutate" style="width: 100px;"/>
+
 - `group_by()` and `summarize()`: create summary statistics on grouped data
-- `arrange()`: sort results
+
+<img src="../fig/dplyr_cheatsheet_group_by.png" alt="rstudio cheatsheet - group_by" style="width: 100px;"/> <img src="../fig/dplyr_cheatsheet_summarize.png" alt="rstudio cheatsheet - summarize" style="width: 100px;"/>
+
 - `count()`: count discrete values
+
+<img src="../fig/dplyr_cheatsheet_count.png" alt="rstudio cheatsheet - count" style="width: 100px;"/>
+
 
 ### Selecting columns and filtering rows
 
