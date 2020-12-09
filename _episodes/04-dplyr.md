@@ -84,6 +84,25 @@ library(tidyverse)
 ~~~
 {: .language-r}
 
+
+
+~~~
+Warning: package 'tidyverse' was built under R version 4.0.2
+~~~
+{: .warning}
+
+
+
+~~~
+Error: package or namespace load failed for 'tidyverse' in dyn.load(file, DLLpath = DLLpath, ...):
+ unable to load shared object '/Library/Frameworks/R.framework/Versions/4.0/Resources/library/Rcpp/libs/Rcpp.so':
+  dlopen(/Library/Frameworks/R.framework/Versions/4.0/Resources/library/Rcpp/libs/Rcpp.so, 6): Symbol not found: _EXTPTR_PTR
+  Referenced from: /Library/Frameworks/R.framework/Versions/4.0/Resources/library/Rcpp/libs/Rcpp.so
+  Expected in: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libR.dylib
+ in /Library/Frameworks/R.framework/Versions/4.0/Resources/library/Rcpp/libs/Rcpp.so
+~~~
+{: .error}
+
 You only need to install a package once per computer, but you need to load it
 every time you open a new R session and want to use that package.
 
@@ -216,15 +235,9 @@ select(variants, sample_id, REF, ALT, DP)
 
 
 ~~~
-   sample_id      REF       ALT DP
-1 SRR2584863        T         G  4
-2 SRR2584863        G         T  6
-3 SRR2584863        G         T 10
-4 SRR2584863 CTTTTTTT CTTTTTTTT 12
-5 SRR2584863     CCGC    CCGCGC 10
-6 SRR2584863        C         T 10
+Error in select(variants, sample_id, REF, ALT, DP) %>% head(): could not find function "%>%"
 ~~~
-{: .output}
+{: .error}
 
 This code is much easier to understand!
 
@@ -239,36 +252,9 @@ select(variants, -CHROM)
 
 
 ~~~
-   sample_id    POS ID      REF       ALT QUAL FILTER INDEL IDV IMF DP
-1 SRR2584863   9972 NA        T         G   91     NA FALSE  NA  NA  4
-2 SRR2584863 263235 NA        G         T   85     NA FALSE  NA  NA  6
-3 SRR2584863 281923 NA        G         T  217     NA FALSE  NA  NA 10
-4 SRR2584863 433359 NA CTTTTTTT CTTTTTTTT   64     NA  TRUE  12 1.0 12
-5 SRR2584863 473901 NA     CCGC    CCGCGC  228     NA  TRUE   9 0.9 10
-6 SRR2584863 648692 NA        C         T  210     NA FALSE  NA  NA 10
-        VDB RPB MQB BQB     MQSB       SGB     MQ0F ICB HOB AC AN     DP4 MQ
-1 0.0257451  NA  NA  NA       NA -0.556411 0.000000  NA  NA  1  1 0,0,0,4 60
-2 0.0961330   1   1   1       NA -0.590765 0.166667  NA  NA  1  1 0,1,0,5 33
-3 0.7740830  NA  NA  NA 0.974597 -0.662043 0.000000  NA  NA  1  1 0,0,4,5 60
-4 0.4777040  NA  NA  NA 1.000000 -0.676189 0.000000  NA  NA  1  1 0,1,3,8 60
-5 0.6595050  NA  NA  NA 0.916482 -0.662043 0.000000  NA  NA  1  1 1,0,2,7 60
-6 0.2680140  NA  NA  NA 0.916482 -0.670168 0.000000  NA  NA  1  1 0,0,7,3 60
-                                                               Indiv gt_PL
-1 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 121,0
-2 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 112,0
-3 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 247,0
-4 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam  91,0
-5 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 255,0
-6 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 240,0
-  gt_GT gt_GT_alleles
-1     1             G
-2     1             T
-3     1             T
-4     1     CTTTTTTTT
-5     1        CCGCGC
-6     1             T
+Error in select(variants, -CHROM) %>% head(): could not find function "%>%"
 ~~~
-{: .output}
+{: .error}
 
 #### Tibbles and **`as_tibble()`**
 
@@ -297,22 +283,16 @@ select(variants, sample_id, REF, ALT, DP)
 
 
 ~~~
-# A tibble: 801 x 4
-   sample_id  REF                    ALT                                      DP
-   <chr>      <chr>                  <chr>                                 <int>
- 1 SRR2584863 T                      G                                         4
- 2 SRR2584863 G                      T                                         6
- 3 SRR2584863 G                      T                                        10
- 4 SRR2584863 CTTTTTTT               CTTTTTTTT                                12
- 5 SRR2584863 CCGC                   CCGCGC                                   10
- 6 SRR2584863 C                      T                                        10
- 7 SRR2584863 C                      A                                         8
- 8 SRR2584863 G                      A                                        11
- 9 SRR2584863 ACAGCCAGCCAGCCAGCCAGC… ACAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCAG…     3
-10 SRR2584863 AT                     ATT                                       7
-# … with 791 more rows
+Error in as_tibble(variants): could not find function "as_tibble"
 ~~~
-{: .output}
+{: .error}
+
+
+
+~~~
+Error in select(variants, sample_id, REF, ALT, DP): could not find function "select"
+~~~
+{: .error}
 
 This looks much better!
 
@@ -328,25 +308,9 @@ filter(variants, sample_id == "SRR2584863")
 
 
 ~~~
-# A tibble: 25 x 29
-   sample_id CHROM    POS ID    REF   ALT    QUAL FILTER INDEL   IDV    IMF
-   <chr>     <chr>  <int> <lgl> <chr> <chr> <dbl> <lgl>  <lgl> <int>  <dbl>
- 1 SRR25848… CP00… 9.97e3 NA    T     G        91 NA     FALSE    NA NA    
- 2 SRR25848… CP00… 2.63e5 NA    G     T        85 NA     FALSE    NA NA    
- 3 SRR25848… CP00… 2.82e5 NA    G     T       217 NA     FALSE    NA NA    
- 4 SRR25848… CP00… 4.33e5 NA    CTTT… CTTT…    64 NA     TRUE     12  1    
- 5 SRR25848… CP00… 4.74e5 NA    CCGC  CCGC…   228 NA     TRUE      9  0.9  
- 6 SRR25848… CP00… 6.49e5 NA    C     T       210 NA     FALSE    NA NA    
- 7 SRR25848… CP00… 1.33e6 NA    C     A       178 NA     FALSE    NA NA    
- 8 SRR25848… CP00… 1.73e6 NA    G     A       225 NA     FALSE    NA NA    
- 9 SRR25848… CP00… 2.10e6 NA    ACAG… ACAG…    56 NA     TRUE      2  0.667
-10 SRR25848… CP00… 2.33e6 NA    AT    ATT     167 NA     TRUE      7  1    
-# … with 15 more rows, and 18 more variables: DP <int>, VDB <dbl>, RPB <dbl>,
-#   MQB <dbl>, BQB <dbl>, MQSB <dbl>, SGB <dbl>, MQ0F <dbl>, ICB <lgl>,
-#   HOB <lgl>, AC <int>, AN <int>, DP4 <chr>, MQ <int>, Indiv <chr>,
-#   gt_PL <chr>, gt_GT <int>, gt_GT_alleles <chr>
+Error in filter(variants, sample_id == "SRR2584863"): object 'sample_id' not found
 ~~~
-{: .output}
+{: .error}
 
 Note that this is equivalent to the base R code below, but is easier to read!
 
@@ -381,22 +345,9 @@ variants %>%
 
 
 ~~~
-# A tibble: 25 x 3
-   REF                        ALT                                             DP
-   <chr>                      <chr>                                        <int>
- 1 T                          G                                                4
- 2 G                          T                                                6
- 3 G                          T                                               10
- 4 CTTTTTTT                   CTTTTTTTT                                       12
- 5 CCGC                       CCGCGC                                          10
- 6 C                          T                                               10
- 7 C                          A                                                8
- 8 G                          A                                               11
- 9 ACAGCCAGCCAGCCAGCCAGCCAGC… ACAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCA…     3
-10 AT                         ATT                                              7
-# … with 15 more rows
+Error in variants %>% filter(sample_id == "SRR2584863") %>% select(REF, : could not find function "%>%"
 ~~~
-{: .output}
+{: .error}
 
 In the above code, we use the pipe to send the `variants` dataset first through
 `filter()`, to keep rows where `sample_id` matches a particular sample, and then
@@ -427,6 +378,13 @@ SRR2584863_variants <- variants %>%
 ~~~
 {: .language-r}
 
+
+
+~~~
+Error in variants %>% filter(sample_id == "SRR2584863") %>% select(REF, : could not find function "%>%"
+~~~
+{: .error}
+
 This new object includes all of the data from this sample. Let's look at just
 the first six rows to confirm it's what we want:
 
@@ -439,17 +397,9 @@ head(SRR2584863_variants)
 
 
 ~~~
-# A tibble: 6 x 3
-  REF      ALT          DP
-  <chr>    <chr>     <int>
-1 T        G             4
-2 G        T             6
-3 G        T            10
-4 CTTTTTTT CTTTTTTTT    12
-5 CCGC     CCGCGC       10
-6 C        T            10
+Error in head(SRR2584863_variants): object 'SRR2584863_variants' not found
 ~~~
-{: .output}
+{: .error}
 
 > ## Exercise: Pipe and filter
 >
@@ -471,27 +421,9 @@ head(SRR2584863_variants)
 >> 
 >> 
 >> ~~~
->> # A tibble: 16 x 3
->>    REF      ALT           POS
->>    <chr>    <chr>       <int>
->>  1 G        T          281923
->>  2 CTTTTTTT CTTTTTTTT  433359
->>  3 CCGC     CCGCGC     473901
->>  4 C        T          648692
->>  5 G        A         1733343
->>  6 A        C         2446984
->>  7 G        T         2618472
->>  8 A        T         2665639
->>  9 G        A         2999330
->> 10 A        C         3339313
->> 11 C        A         3401754
->> 12 A        C         3488669
->> 13 G        T         3909807
->> 14 A        G         4100183
->> 15 A        C         4201958
->> 16 TGG      T         4431393
+>> Error in variants %>% filter(sample_id == "SRR2584863" & DP >= 10) %>% : could not find function "%>%"
 >> ~~~
->> {: .output}
+>> {: .error}
 > {: .solution}
 {: .challenge}
 
@@ -524,40 +456,9 @@ variants %>%
 
 
 ~~~
-Rows: 801
-Columns: 30
-$ sample_id     <chr> "SRR2584863", "SRR2584863", "SRR2584863", "SRR2584863",…
-$ CHROM         <chr> "CP000819.1", "CP000819.1", "CP000819.1", "CP000819.1",…
-$ POS           <int> 9972, 263235, 281923, 433359, 473901, 648692, 1331794, …
-$ ID            <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ REF           <chr> "T", "G", "G", "CTTTTTTT", "CCGC", "C", "C", "G", "ACAG…
-$ ALT           <chr> "G", "T", "T", "CTTTTTTTT", "CCGCGC", "T", "A", "A", "A…
-$ QUAL          <dbl> 91.0000, 85.0000, 217.0000, 64.0000, 228.0000, 210.0000…
-$ FILTER        <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ INDEL         <lgl> FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, T…
-$ IDV           <int> NA, NA, NA, 12, 9, NA, NA, NA, 2, 7, NA, NA, NA, NA, NA…
-$ IMF           <dbl> NA, NA, NA, 1.000000, 0.900000, NA, NA, NA, 0.666667, 1…
-$ DP            <int> 4, 6, 10, 12, 10, 10, 8, 11, 3, 7, 9, 20, 12, 19, 15, 1…
-$ VDB           <dbl> 0.0257451, 0.0961330, 0.7740830, 0.4777040, 0.6595050, …
-$ RPB           <dbl> NA, 1.000000, NA, NA, NA, NA, NA, NA, NA, NA, 0.900802,…
-$ MQB           <dbl> NA, 1.0000000, NA, NA, NA, NA, NA, NA, NA, NA, 0.150134…
-$ BQB           <dbl> NA, 1.000000, NA, NA, NA, NA, NA, NA, NA, NA, 0.750668,…
-$ MQSB          <dbl> NA, NA, 0.974597, 1.000000, 0.916482, 0.916482, 0.90080…
-$ SGB           <dbl> -0.556411, -0.590765, -0.662043, -0.676189, -0.662043, …
-$ MQ0F          <dbl> 0.000000, 0.166667, 0.000000, 0.000000, 0.000000, 0.000…
-$ ICB           <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ HOB           <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ AC            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-$ AN            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-$ DP4           <chr> "0,0,0,4", "0,1,0,5", "0,0,4,5", "0,1,3,8", "1,0,2,7", …
-$ MQ            <int> 60, 33, 60, 60, 60, 60, 60, 60, 60, 60, 25, 60, 10, 60,…
-$ Indiv         <chr> "/home/dcuser/dc_workshop/results/bam/SRR2584863.aligne…
-$ gt_PL         <chr> "121,0", "112,0", "247,0", "91,0", "255,0", "240,0", "2…
-$ gt_GT         <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-$ gt_GT_alleles <chr> "G", "T", "T", "CTTTTTTTT", "CCGCGC", "T", "A", "A", "A…
-$ POLPROB       <dbl> 1.0000000, 1.0000000, 1.0000000, 0.9999996, 1.0000000, …
+Error in variants %>% mutate(POLPROB = 1 - (10^-(QUAL/10))) %>% glimpse(): could not find function "%>%"
 ~~~
-{: .output}
+{: .error}
 
 NOTE: We've used the `glimpse()` function to show only the first few 
 values of data for each variable - you can see it's quite similar to 
@@ -584,14 +485,9 @@ to just show 6 rows rather than the 10 rows shown by default with tibbles.
 >> 
 >> 
 >> ~~~
->> Rows: 801
->> Columns: 4
->> $ sample_id <chr> "SRR2584863", "SRR2584863", "SRR2584863", "SRR2584863", "SR…
->> $ POS       <int> 9972, 263235, 281923, 433359, 473901, 648692, 1331794, 1733…
->> $ QUAL      <dbl> 91.0000, 85.0000, 217.0000, 64.0000, 228.0000, 210.0000, 17…
->> $ POLPROB   <dbl> 1.0000000, 1.0000000, 1.0000000, 0.9999996, 1.0000000, 1.00…
+>> Error in variants %>% mutate(POLPROB = 1 - 10^-(QUAL/10)) %>% select(sample_id, : could not find function "%>%"
 >> ~~~
->> {: .output}
+>> {: .error}
 > {: .solution}
 {: .challenge}
 
@@ -623,21 +519,9 @@ variants %>%
 
 
 ~~~
-`summarise()` ungrouping output (override with `.groups` argument)
+Error in variants %>% group_by(sample_id) %>% summarize(n_observations = n()): could not find function "%>%"
 ~~~
-{: .output}
-
-
-
-~~~
-# A tibble: 3 x 2
-  sample_id  n_observations
-  <chr>               <int>
-1 SRR2584863             25
-2 SRR2584866            766
-3 SRR2589044             10
-~~~
-{: .output}
+{: .error}
 
 Here the summary function used was `n()` to find the count for each
 group, which we displayed in a column which we called `n_observations`. 
@@ -661,21 +545,9 @@ variants %>%
 
 
 ~~~
-`summarise()` ungrouping output (override with `.groups` argument)
+Error in variants %>% group_by(sample_id) %>% summarize(max(DP)): could not find function "%>%"
 ~~~
-{: .output}
-
-
-
-~~~
-# A tibble: 3 x 2
-  sample_id  `max(DP)`
-  <chr>          <int>
-1 SRR2584863        20
-2 SRR2584866        79
-3 SRR2589044        16
-~~~
-{: .output}
+{: .error}
 
 <!-- TODO: summarize() more than one variable (e.g. get min, mean sampling depth per sample) -->
 <!-- TODO: summarize() more than one variable (e.g. get min, mean sampling depth per sample) -->

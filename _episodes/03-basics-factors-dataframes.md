@@ -109,6 +109,13 @@ library("readr")          ## load
 ~~~
 {: .language-r}
 
+
+
+~~~
+Warning: package 'readr' was built under R version 4.0.2
+~~~
+{: .warning}
+
 *You only need to install a package once per computer, but you need to load it
 every time you open a new R session and want to use that package.*
 
@@ -184,7 +191,8 @@ variants <- readr::read_csv("https://ndownloader.figshare.com/files/14632895")
 
 
 ~~~
-Parsed with column specification:
+
+── Column specification ────────────────────────────────────────────────────────
 cols(
   .default = col_double(),
   sample_id = col_character(),
@@ -201,13 +209,7 @@ cols(
   gt_PL = col_number(),
   gt_GT_alleles = col_character()
 )
-~~~
-{: .output}
-
-
-
-~~~
-See spec(...) for full column specifications.
+ℹ Use `spec()` for the full column specifications.
 ~~~
 {: .output}
 

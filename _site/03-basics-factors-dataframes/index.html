@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2020-12-08 13:03:48 +0000">
+    <meta http-equiv="last-modified" content="2020-12-09 01:17:45 +0000">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -448,6 +448,9 @@ choose a site to download the package from. The choice doesn’t matter too much
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="s2">"readr"</span><span class="p">)</span><span class="w">          </span><span class="c1">## load</span><span class="w">
 </span></code></pre></div></div>
 
+<div class="language-plaintext warning highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Warning: package 'readr' was built under R version 4.0.2
+</code></pre></div></div>
+
 <p><em>You only need to install a package once per computer, but you need to load it
 every time you open a new R session and want to use that package.</em></p>
 
@@ -529,7 +532,8 @@ frequently, you may be surprised at what you find they can do.</p>
 </span><span class="n">variants</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">readr</span><span class="o">::</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"https://ndownloader.figshare.com/files/14632895"</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Parsed with column specification:
+<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+── Column specification ────────────────────────────────────────────────────────
 cols(
   .default = col_double(),
   sample_id = col_character(),
@@ -546,9 +550,7 @@ cols(
   gt_PL = col_number(),
   gt_GT_alleles = col_character()
 )
-</code></pre></div></div>
-
-<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>See spec(...) for full column specifications.
+ℹ Use `spec()` for the full column specifications.
 </code></pre></div></div>
 
 <p>One of the first things you should notice is that in the Environment window,
@@ -1470,7 +1472,7 @@ be written in the current working directory).</p>
     </div>
   </div>
   <p class="text-muted text-right">
-    <small><i>Using <a href="https://github.com/carpentries/carpentries-theme/">The Carpentries theme</a> &mdash; Site last built on: 2020-12-08 13:03:48 +0000.</i></small>
+    <small><i>Using <a href="https://github.com/carpentries/carpentries-theme/">The Carpentries theme</a> &mdash; Site last built on: 2020-12-09 01:17:45 +0000.</i></small>
   </p>
 </footer>
 

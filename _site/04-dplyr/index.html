@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2020-12-08 13:03:48 +0000">
+    <meta http-equiv="last-modified" content="2020-12-09 01:17:45 +0000">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -413,6 +413,17 @@ choose a site to download the package from. The choice doesn’t matter too much
 </span><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
+<div class="language-plaintext warning highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Warning: package 'tidyverse' was built under R version 4.0.2
+</code></pre></div></div>
+
+<div class="language-plaintext error highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error: package or namespace load failed for 'tidyverse' in dyn.load(file, DLLpath = DLLpath, ...):
+ unable to load shared object '/Library/Frameworks/R.framework/Versions/4.0/Resources/library/Rcpp/libs/Rcpp.so':
+  dlopen(/Library/Frameworks/R.framework/Versions/4.0/Resources/library/Rcpp/libs/Rcpp.so, 6): Symbol not found: _EXTPTR_PTR
+  Referenced from: /Library/Frameworks/R.framework/Versions/4.0/Resources/library/Rcpp/libs/Rcpp.so
+  Expected in: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libR.dylib
+ in /Library/Frameworks/R.framework/Versions/4.0/Resources/library/Rcpp/libs/Rcpp.so
+</code></pre></div></div>
+
 <p>You only need to install a package once per computer, but you need to load it
 every time you open a new R session and want to use that package.</p>
 
@@ -535,13 +546,7 @@ columns to keep.</p>
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">select</span><span class="p">(</span><span class="n">variants</span><span class="p">,</span><span class="w"> </span><span class="n">sample_id</span><span class="p">,</span><span class="w"> </span><span class="n">REF</span><span class="p">,</span><span class="w"> </span><span class="n">ALT</span><span class="p">,</span><span class="w"> </span><span class="n">DP</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   sample_id      REF       ALT DP
-1 SRR2584863        T         G  4
-2 SRR2584863        G         T  6
-3 SRR2584863        G         T 10
-4 SRR2584863 CTTTTTTT CTTTTTTTT 12
-5 SRR2584863     CCGC    CCGCGC 10
-6 SRR2584863        C         T 10
+<div class="language-plaintext error highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error in select(variants, sample_id, REF, ALT, DP) %&gt;% head(): could not find function "%&gt;%"
 </code></pre></div></div>
 
 <p>This code is much easier to understand!</p>
@@ -552,34 +557,7 @@ the variable to exclude it.</p>
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">select</span><span class="p">(</span><span class="n">variants</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">CHROM</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   sample_id    POS ID      REF       ALT QUAL FILTER INDEL IDV IMF DP
-1 SRR2584863   9972 NA        T         G   91     NA FALSE  NA  NA  4
-2 SRR2584863 263235 NA        G         T   85     NA FALSE  NA  NA  6
-3 SRR2584863 281923 NA        G         T  217     NA FALSE  NA  NA 10
-4 SRR2584863 433359 NA CTTTTTTT CTTTTTTTT   64     NA  TRUE  12 1.0 12
-5 SRR2584863 473901 NA     CCGC    CCGCGC  228     NA  TRUE   9 0.9 10
-6 SRR2584863 648692 NA        C         T  210     NA FALSE  NA  NA 10
-        VDB RPB MQB BQB     MQSB       SGB     MQ0F ICB HOB AC AN     DP4 MQ
-1 0.0257451  NA  NA  NA       NA -0.556411 0.000000  NA  NA  1  1 0,0,0,4 60
-2 0.0961330   1   1   1       NA -0.590765 0.166667  NA  NA  1  1 0,1,0,5 33
-3 0.7740830  NA  NA  NA 0.974597 -0.662043 0.000000  NA  NA  1  1 0,0,4,5 60
-4 0.4777040  NA  NA  NA 1.000000 -0.676189 0.000000  NA  NA  1  1 0,1,3,8 60
-5 0.6595050  NA  NA  NA 0.916482 -0.662043 0.000000  NA  NA  1  1 1,0,2,7 60
-6 0.2680140  NA  NA  NA 0.916482 -0.670168 0.000000  NA  NA  1  1 0,0,7,3 60
-                                                               Indiv gt_PL
-1 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 121,0
-2 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 112,0
-3 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 247,0
-4 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam  91,0
-5 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 255,0
-6 /home/dcuser/dc_workshop/results/bam/SRR2584863.aligned.sorted.bam 240,0
-  gt_GT gt_GT_alleles
-1     1             G
-2     1             T
-3     1             T
-4     1     CTTTTTTTT
-5     1        CCGCGC
-6     1             T
+<div class="language-plaintext error highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error in select(variants, -CHROM) %&gt;% head(): could not find function "%&gt;%"
 </code></pre></div></div>
 
 <h4 id="tibbles-and-as_tibble">Tibbles and <strong><code class="language-plaintext highlighter-rouge">as_tibble()</code></strong></h4>
@@ -605,20 +583,10 @@ They also help make our data manipulation much easier!</p>
 </span><span class="n">select</span><span class="p">(</span><span class="n">variants</span><span class="p">,</span><span class="w"> </span><span class="n">sample_id</span><span class="p">,</span><span class="w"> </span><span class="n">REF</span><span class="p">,</span><span class="w"> </span><span class="n">ALT</span><span class="p">,</span><span class="w"> </span><span class="n">DP</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 801 x 4
-   sample_id  REF                    ALT                                      DP
-   &lt;chr&gt;      &lt;chr&gt;                  &lt;chr&gt;                                 &lt;int&gt;
- 1 SRR2584863 T                      G                                         4
- 2 SRR2584863 G                      T                                         6
- 3 SRR2584863 G                      T                                        10
- 4 SRR2584863 CTTTTTTT               CTTTTTTTT                                12
- 5 SRR2584863 CCGC                   CCGCGC                                   10
- 6 SRR2584863 C                      T                                        10
- 7 SRR2584863 C                      A                                         8
- 8 SRR2584863 G                      A                                        11
- 9 SRR2584863 ACAGCCAGCCAGCCAGCCAGC… ACAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCAG…     3
-10 SRR2584863 AT                     ATT                                       7
-# … with 791 more rows
+<div class="language-plaintext error highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error in as_tibble(variants): could not find function "as_tibble"
+</code></pre></div></div>
+
+<div class="language-plaintext error highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error in select(variants, sample_id, REF, ALT, DP): could not find function "select"
 </code></pre></div></div>
 
 <p>This looks much better!</p>
@@ -630,23 +598,7 @@ They also help make our data manipulation much easier!</p>
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">filter</span><span class="p">(</span><span class="n">variants</span><span class="p">,</span><span class="w"> </span><span class="n">sample_id</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"SRR2584863"</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 25 x 29
-   sample_id CHROM    POS ID    REF   ALT    QUAL FILTER INDEL   IDV    IMF
-   &lt;chr&gt;     &lt;chr&gt;  &lt;int&gt; &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;lgl&gt;  &lt;lgl&gt; &lt;int&gt;  &lt;dbl&gt;
- 1 SRR25848… CP00… 9.97e3 NA    T     G        91 NA     FALSE    NA NA    
- 2 SRR25848… CP00… 2.63e5 NA    G     T        85 NA     FALSE    NA NA    
- 3 SRR25848… CP00… 2.82e5 NA    G     T       217 NA     FALSE    NA NA    
- 4 SRR25848… CP00… 4.33e5 NA    CTTT… CTTT…    64 NA     TRUE     12  1    
- 5 SRR25848… CP00… 4.74e5 NA    CCGC  CCGC…   228 NA     TRUE      9  0.9  
- 6 SRR25848… CP00… 6.49e5 NA    C     T       210 NA     FALSE    NA NA    
- 7 SRR25848… CP00… 1.33e6 NA    C     A       178 NA     FALSE    NA NA    
- 8 SRR25848… CP00… 1.73e6 NA    G     A       225 NA     FALSE    NA NA    
- 9 SRR25848… CP00… 2.10e6 NA    ACAG… ACAG…    56 NA     TRUE      2  0.667
-10 SRR25848… CP00… 2.33e6 NA    AT    ATT     167 NA     TRUE      7  1    
-# … with 15 more rows, and 18 more variables: DP &lt;int&gt;, VDB &lt;dbl&gt;, RPB &lt;dbl&gt;,
-#   MQB &lt;dbl&gt;, BQB &lt;dbl&gt;, MQSB &lt;dbl&gt;, SGB &lt;dbl&gt;, MQ0F &lt;dbl&gt;, ICB &lt;lgl&gt;,
-#   HOB &lt;lgl&gt;, AC &lt;int&gt;, AN &lt;int&gt;, DP4 &lt;chr&gt;, MQ &lt;int&gt;, Indiv &lt;chr&gt;,
-#   gt_PL &lt;chr&gt;, gt_GT &lt;int&gt;, gt_GT_alleles &lt;chr&gt;
+<div class="language-plaintext error highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error in filter(variants, sample_id == "SRR2584863"): object 'sample_id' not found
 </code></pre></div></div>
 
 <p>Note that this is equivalent to the base R code below, but is easier to read!</p>
@@ -673,20 +625,7 @@ or <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> if you’re using a Mac.</p>
   </span><span class="n">select</span><span class="p">(</span><span class="n">REF</span><span class="p">,</span><span class="w"> </span><span class="n">ALT</span><span class="p">,</span><span class="w"> </span><span class="n">DP</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 25 x 3
-   REF                        ALT                                             DP
-   &lt;chr&gt;                      &lt;chr&gt;                                        &lt;int&gt;
- 1 T                          G                                                4
- 2 G                          T                                                6
- 3 G                          T                                               10
- 4 CTTTTTTT                   CTTTTTTTT                                       12
- 5 CCGC                       CCGCGC                                          10
- 6 C                          T                                               10
- 7 C                          A                                                8
- 8 G                          A                                               11
- 9 ACAGCCAGCCAGCCAGCCAGCCAGC… ACAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCAGCCA…     3
-10 AT                         ATT                                              7
-# … with 15 more rows
+<div class="language-plaintext error highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error in variants %&gt;% filter(sample_id == "SRR2584863") %&gt;% select(REF, : could not find function "%&gt;%"
 </code></pre></div></div>
 
 <p>In the above code, we use the pipe to send the <code class="language-plaintext highlighter-rouge">variants</code> dataset first through
@@ -715,21 +654,16 @@ can do so by assigning it a new name:</p>
   </span><span class="n">select</span><span class="p">(</span><span class="n">REF</span><span class="p">,</span><span class="w"> </span><span class="n">ALT</span><span class="p">,</span><span class="w"> </span><span class="n">DP</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
+<div class="language-plaintext error highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error in variants %&gt;% filter(sample_id == "SRR2584863") %&gt;% select(REF, : could not find function "%&gt;%"
+</code></pre></div></div>
+
 <p>This new object includes all of the data from this sample. Let’s look at just
 the first six rows to confirm it’s what we want:</p>
 
 <div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">head</span><span class="p">(</span><span class="n">SRR2584863_variants</span><span class="p">)</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 6 x 3
-  REF      ALT          DP
-  &lt;chr&gt;    &lt;chr&gt;     &lt;int&gt;
-1 T        G             4
-2 G        T             6
-3 G        T            10
-4 CTTTTTTT CTTTTTTTT    12
-5 CCGC     CCGCGC       10
-6 C        T            10
+<div class="language-plaintext error highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error in head(SRR2584863_variants): object 'SRR2584863_variants' not found
 </code></pre></div></div>
 
 <blockquote class="challenge">
@@ -749,25 +683,7 @@ and <code class="language-plaintext highlighter-rouge">POS</code>.</p>
  </span><span class="n">select</span><span class="p">(</span><span class="n">REF</span><span class="p">,</span><span class="w"> </span><span class="n">ALT</span><span class="p">,</span><span class="w"> </span><span class="n">POS</span><span class="p">)</span><span class="w">
 </span></code></pre></div>    </div>
 
-    <div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 16 x 3
-   REF      ALT           POS
-   &lt;chr&gt;    &lt;chr&gt;       &lt;int&gt;
- 1 G        T          281923
- 2 CTTTTTTT CTTTTTTTT  433359
- 3 CCGC     CCGCGC     473901
- 4 C        T          648692
- 5 G        A         1733343
- 6 A        C         2446984
- 7 G        T         2618472
- 8 A        T         2665639
- 9 G        A         2999330
-10 A        C         3339313
-11 C        A         3401754
-12 A        C         3488669
-13 G        T         3909807
-14 A        G         4100183
-15 A        C         4201958
-16 TGG      T         4431393
+    <div class="language-plaintext error highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error in variants %&gt;% filter(sample_id == "SRR2584863" &amp; DP &gt;= 10) %&gt;% : could not find function "%&gt;%"
 </code></pre></div>    </div>
   </blockquote>
 </blockquote>
@@ -794,38 +710,7 @@ the probability of a polymorphism at that site given the data.</p>
   </span><span class="n">glimpse</span><span class="p">()</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Rows: 801
-Columns: 30
-$ sample_id     &lt;chr&gt; "SRR2584863", "SRR2584863", "SRR2584863", "SRR2584863",…
-$ CHROM         &lt;chr&gt; "CP000819.1", "CP000819.1", "CP000819.1", "CP000819.1",…
-$ POS           &lt;int&gt; 9972, 263235, 281923, 433359, 473901, 648692, 1331794, …
-$ ID            &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ REF           &lt;chr&gt; "T", "G", "G", "CTTTTTTT", "CCGC", "C", "C", "G", "ACAG…
-$ ALT           &lt;chr&gt; "G", "T", "T", "CTTTTTTTT", "CCGCGC", "T", "A", "A", "A…
-$ QUAL          &lt;dbl&gt; 91.0000, 85.0000, 217.0000, 64.0000, 228.0000, 210.0000…
-$ FILTER        &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ INDEL         &lt;lgl&gt; FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, T…
-$ IDV           &lt;int&gt; NA, NA, NA, 12, 9, NA, NA, NA, 2, 7, NA, NA, NA, NA, NA…
-$ IMF           &lt;dbl&gt; NA, NA, NA, 1.000000, 0.900000, NA, NA, NA, 0.666667, 1…
-$ DP            &lt;int&gt; 4, 6, 10, 12, 10, 10, 8, 11, 3, 7, 9, 20, 12, 19, 15, 1…
-$ VDB           &lt;dbl&gt; 0.0257451, 0.0961330, 0.7740830, 0.4777040, 0.6595050, …
-$ RPB           &lt;dbl&gt; NA, 1.000000, NA, NA, NA, NA, NA, NA, NA, NA, 0.900802,…
-$ MQB           &lt;dbl&gt; NA, 1.0000000, NA, NA, NA, NA, NA, NA, NA, NA, 0.150134…
-$ BQB           &lt;dbl&gt; NA, 1.000000, NA, NA, NA, NA, NA, NA, NA, NA, 0.750668,…
-$ MQSB          &lt;dbl&gt; NA, NA, 0.974597, 1.000000, 0.916482, 0.916482, 0.90080…
-$ SGB           &lt;dbl&gt; -0.556411, -0.590765, -0.662043, -0.676189, -0.662043, …
-$ MQ0F          &lt;dbl&gt; 0.000000, 0.166667, 0.000000, 0.000000, 0.000000, 0.000…
-$ ICB           &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ HOB           &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ AC            &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-$ AN            &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-$ DP4           &lt;chr&gt; "0,0,0,4", "0,1,0,5", "0,0,4,5", "0,1,3,8", "1,0,2,7", …
-$ MQ            &lt;int&gt; 60, 33, 60, 60, 60, 60, 60, 60, 60, 60, 25, 60, 10, 60,…
-$ Indiv         &lt;chr&gt; "/home/dcuser/dc_workshop/results/bam/SRR2584863.aligne…
-$ gt_PL         &lt;chr&gt; "121,0", "112,0", "247,0", "91,0", "255,0", "240,0", "2…
-$ gt_GT         &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-$ gt_GT_alleles &lt;chr&gt; "G", "T", "T", "CTTTTTTTT", "CCGCGC", "T", "A", "A", "A…
-$ POLPROB       &lt;dbl&gt; 1.0000000, 1.0000000, 1.0000000, 0.9999996, 1.0000000, …
+<div class="language-plaintext error highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error in variants %&gt;% mutate(POLPROB = 1 - (10^-(QUAL/10))) %&gt;% glimpse(): could not find function "%&gt;%"
 </code></pre></div></div>
 
 <p>NOTE: We’ve used the <code class="language-plaintext highlighter-rouge">glimpse()</code> function to show only the first few 
@@ -850,12 +735,7 @@ line to the above code to only show those columns and show the output via <code 
 </span><span class="n">glimpse</span><span class="p">()</span><span class="w">
 </span></code></pre></div>    </div>
 
-    <div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Rows: 801
-Columns: 4
-$ sample_id &lt;chr&gt; "SRR2584863", "SRR2584863", "SRR2584863", "SRR2584863", "SR…
-$ POS       &lt;int&gt; 9972, 263235, 281923, 433359, 473901, 648692, 1331794, 1733…
-$ QUAL      &lt;dbl&gt; 91.0000, 85.0000, 217.0000, 64.0000, 228.0000, 210.0000, 17…
-$ POLPROB   &lt;dbl&gt; 1.0000000, 1.0000000, 1.0000000, 0.9999996, 1.0000000, 1.00…
+    <div class="language-plaintext error highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error in variants %&gt;% mutate(POLPROB = 1 - 10^-(QUAL/10)) %&gt;% select(sample_id, : could not find function "%&gt;%"
 </code></pre></div>    </div>
   </blockquote>
 </blockquote>
@@ -882,15 +762,7 @@ of data for each sample, we would do:</p>
   </span><span class="n">summarize</span><span class="p">(</span><span class="n">n_observations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">())</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>`summarise()` ungrouping output (override with `.groups` argument)
-</code></pre></div></div>
-
-<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 3 x 2
-  sample_id  n_observations
-  &lt;chr&gt;               &lt;int&gt;
-1 SRR2584863             25
-2 SRR2584866            766
-3 SRR2589044             10
+<div class="language-plaintext error highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error in variants %&gt;% group_by(sample_id) %&gt;% summarize(n_observations = n()): could not find function "%&gt;%"
 </code></pre></div></div>
 
 <p>Here the summary function used was <code class="language-plaintext highlighter-rouge">n()</code> to find the count for each
@@ -909,15 +781,7 @@ additional packages.</p>
   </span><span class="n">summarize</span><span class="p">(</span><span class="nf">max</span><span class="p">(</span><span class="n">DP</span><span class="p">))</span><span class="w">
 </span></code></pre></div></div>
 
-<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>`summarise()` ungrouping output (override with `.groups` argument)
-</code></pre></div></div>
-
-<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code># A tibble: 3 x 2
-  sample_id  `max(DP)`
-  &lt;chr&gt;          &lt;int&gt;
-1 SRR2584863        20
-2 SRR2584866        79
-3 SRR2589044        16
+<div class="language-plaintext error highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error in variants %&gt;% group_by(sample_id) %&gt;% summarize(max(DP)): could not find function "%&gt;%"
 </code></pre></div></div>
 
 <!-- TODO: summarize() more than one variable (e.g. get min, mean sampling depth per sample) -->
@@ -1120,7 +984,7 @@ cleaned up version of the data set that doesn’t include any missing data.</p>
     </div>
   </div>
   <p class="text-muted text-right">
-    <small><i>Using <a href="https://github.com/carpentries/carpentries-theme/">The Carpentries theme</a> &mdash; Site last built on: 2020-12-08 13:03:48 +0000.</i></small>
+    <small><i>Using <a href="https://github.com/carpentries/carpentries-theme/">The Carpentries theme</a> &mdash; Site last built on: 2020-12-09 01:17:45 +0000.</i></small>
   </p>
 </footer>
 
