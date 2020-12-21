@@ -16,7 +16,7 @@ objectives:
 keypoints:
 - "ggplot2 maps variables in a tidy data frame to visual aesthetics such as position and color."
 - "Plots are built iteratively from different components: data, geoms, scales, and themes."
-- "You can customize any aspect of a plots to best display your data."
+- "You can customize any aspect of a plot to best display your data."
 source: Rmd
 ---
 
@@ -47,7 +47,7 @@ to as "geometries", or "geom" for short.
 
 Some simple examples will help. We will first plot one of R's built-in datasets,
 the [*Iris* flower dataset](https://en.wikipedia.org/wiki/Iris_flower_data_set),
-which measured sizes of iris flowers in different species, in the 1930s.
+which measured sizes of iris flowers in different species, in 1930s Canada^[The iris dataset was collected by scientists who supported eugenics, a discredited and discriminatory historical practice. More background is given on the wikipedia page.].
 This data set records the length and width of two different parts of flowers, the Sepal 
 and the Petal, for three different species, (*Iris setosa*, *Iris virginica* and *Iris versicolor*).
 
@@ -267,8 +267,9 @@ ggplot(data = variants, aes(x = POS, y = DP, color = sample_id)) +
   scale_y_log10()
 ```
 
-Althoguh we could transform the x-axis using `scale_x_log10`, that would be absurd for genomic position.
-ggplot's capabilities are designed to 
+Although we could transform the x-axis using `scale_x_log10`, that is not appropriate if the x-axis represents genomic position.
+ggplot allows you to customize almost any aspect of a plot, whether or not it is a good idea!
+
 To find out more about different scales, you can again use the help functions, such as 
 `?scale_y_log10`. Or, type `scale_` and tab autocomplete to find out what other options are available.
 
@@ -372,7 +373,7 @@ ggplot(data = variants, aes(x = POS, y = MQ, color = sample_id)) +
 
 In addition to `theme_bw()`, which changes the plot background to white, **`ggplot2`**
 comes with several other themes which can be useful to quickly change the look
-of your visualization. The complete list of themes is available
+of your visualization. The complete list of built-in themes is available
 at <https://ggplot2.tidyverse.org/reference/ggtheme.html>. `theme_minimal()` and
 `theme_light()` are popular, and `theme_void()` can be useful as a starting
 point to create a new hand-crafted theme.
@@ -415,8 +416,11 @@ ggplot(data = variants, aes(x = INDEL)) +
 > {: .solution}
 {: .challenge}
 
-There is much more flexibility in terms of statistical summaries and counting in ggplot, 
-but we don't have time to cover it in this lesson.
+There is much more flexibility in terms of statistical summaries and counting in ggplot.
+See the Tip box "Where to learn more about plotting" to find out more.
+
+
+## Exporting plots to files
 
 To export a plot to a file, use the **Export** button, in the bottom right plotting window in RStudio.
 Or you can write this into a script using the function `ggsave` - remember, use `?ggsave` to
@@ -441,7 +445,6 @@ ask for help from your R session.
 > Others are more practical about how to program with ggplot2.
 > - [R for ecology ggplot2](https://datacarpentry.org/R-ecology-lesson/04-visualization-ggplot2.html):
     Episode from Data Carpentry lesson introducing ggplot with a different example dataset.
-    https://ggplot2-book.org/
 > - [ggplot2: elegant graphics for data analysis](https://ggplot2-book.org/): By Hadley Wickham, 
     Danielle Navarro, and Thomas Lin Pedersen. Gives some basics of ggplot2, but its primary focus
     is explaining the Grammar of Graphics that ggplot2 uses.
